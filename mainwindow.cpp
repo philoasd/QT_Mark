@@ -85,15 +85,32 @@ void MainWindow::InitCamera()
 void MainWindow::ShowImage(const CGrabResultPtr& ptrGrabResult)
 {
 	if (ptrGrabResult->GrabSucceeded()) {
-		QImage img = ConvertBalserToQImage(ptrGrabResult); // 将Basler图像原始数据转换为QImage
+		QImage img = ImageConvert::ConvertBalserToQImage(ptrGrabResult); // 将Basler图像原始数据转换为QImage
 		m_ptrGrabResult = img.copy(); // 将QImage赋值给图像缓冲区
 		emit ShowImageSignal(QPixmap::fromImage(img)); // 发送显示图像信号
+		hasPicture = true;
 	}
 }
 
-QImage MainWindow::ConvertBalserToQImage(const CGrabResultPtr& ptrGrabResult)
+void MainWindow::ThresholdImage(bool autoFlag)
 {
-	return QImage((uchar*)ptrGrabResult->GetBuffer(), ptrGrabResult->GetWidth(), ptrGrabResult->GetHeight(), QImage::Format_Grayscale8);
+	if (hasPicture) {
+		cv::Mat thresholdImage; // 阈值图像
+		if (autoFlag) {
+			thresholdImage = m_ImageProcess->AutoThreshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult)); // 自动阈值分割
+		}
+		else {
+			thresholdImage = m_ImageProcess->Threshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult), ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
+		}
+
+		if ((ui->spinBox_LeftThreshold->value() == 0) && (ui->spinBox_RightThreshold->value() == 255) && !autoFlag) {
+			// 如果左阈值为0，右阈值为255，则显示原图
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ptrGrabResult));
+		}
+		else {
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(thresholdImage))); // 显示图像
+		}
+	}
 }
 
 
@@ -110,13 +127,18 @@ void MainWindow::on_actionOpenCameraInterface_triggered()
 	ui->stackedWidget_Parameters->setCurrentIndex(1); // 切换到相机参数界面
 	ui->pushButton_DisConnectedCamera->setEnabled(false); // 设置断开相机按钮为不可用
 
-	if (USECAMERA) {
-		ui->groupBox_CameraInfo->setVisible(true); // 显示相机信息组合框
-		InitCamera();
-	}
-	else {
-		ui->groupBox_CameraInfo->setVisible(false); // 隐藏相机信息组合框
-	}
+#if USECAMERA
+	ui->groupBox_CameraInfo->setEnabled(true); // 显示相机信息组合框
+	InitCamera();
+#else
+	ui->groupBox_CameraInfo->setEnabled(false); // 隐藏相机信息组合框
+#endif
+
+#if USEOPENCV
+	m_ImageProcess = new OpenCVLibrary(); // 创建OpenCV图像处理对象
+#elif
+
+#endif
 }
 
 
@@ -136,6 +158,8 @@ void MainWindow::on_checkBox_AutoThreshold_clicked()
 	ui->spinBox_LeftThreshold->setReadOnly(true); // 设置左阈值为只读
 	ui->spinBox_RightThreshold->setReadOnly(true); // 设置右阈值为只读
 	ui->horizontalSlider_Threshold->setEnabled(false); // 设置滑动条为不可用
+
+	ThresholdImage(true); // 自动阈值分割
 }
 
 
@@ -144,6 +168,8 @@ void MainWindow::on_checkBox_ManualThreshold_clicked()
 	ui->spinBox_LeftThreshold->setReadOnly(false); // 设置左阈值为可读写
 	ui->spinBox_RightThreshold->setReadOnly(false); // 设置右阈值为可读写
 	ui->horizontalSlider_Threshold->setEnabled(true); // 设置滑动条为可用
+
+	ThresholdImage(false); // 手动阈值分割
 }
 
 
@@ -262,10 +288,24 @@ void MainWindow::on_pushButton_LoadImage_clicked()
 		m_ptrGrabResult = img.copy(); // 将QImage赋值给图像缓冲区
 		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(img));
 		settings.setValue("LastPath", imgPath); // 保存上次打开的路径
+		hasPicture = true;
+		ui->checkBox_ManualThreshold->setChecked(true);
 	}
 	else
 	{
 		return;
 	}
+}
+
+
+void MainWindow::on_spinBox_LeftThreshold_valueChanged(int arg1)
+{
+	ThresholdImage(false); // 手动阈值分割
+}
+
+
+void MainWindow::on_spinBox_RightThreshold_valueChanged(int arg1)
+{
+	ThresholdImage(false); // 手动阈值分割
 }
 

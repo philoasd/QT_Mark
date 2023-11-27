@@ -52,6 +52,9 @@
     <ClCompile Include="ExtendQGraphicsView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ImageConvert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="mainwindow.h">
@@ -64,6 +67,9 @@
       <Filter>DoubleSlider</Filter>
     </QtMoc>
     <QtMoc Include="ExtendQGraphicsView.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ImageConvert.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

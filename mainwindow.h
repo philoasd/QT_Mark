@@ -10,8 +10,10 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSettings>
+#include "ImageConvert.h"
 
 #include <BaslerCamera.h>
+#include <OpenCVLibrary.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -44,11 +46,15 @@ private slots:
 
 	void on_pushButton_DisConnectedCamera_clicked();
 
-    void on_doubleSpinBox_Exposure_valueChanged(double arg1);
+	void on_doubleSpinBox_Exposure_valueChanged(double arg1);
 
-    void on_checkBox_AutoExposure_stateChanged(int arg1);
+	void on_checkBox_AutoExposure_stateChanged(int arg1);
 
-    void on_pushButton_LoadImage_clicked();
+	void on_pushButton_LoadImage_clicked();
+
+    void on_spinBox_LeftThreshold_valueChanged(int arg1);
+
+    void on_spinBox_RightThreshold_valueChanged(int arg1);
 
 private:
 	// 初始化UI
@@ -61,8 +67,8 @@ private:
 	void InitCamera();
 	// 显示图像
 	void ShowImage(const CGrabResultPtr& ptrGrabResult);
-	// 将Basler图像转换为QImage
-	QImage ConvertBalserToQImage(const CGrabResultPtr& ptrGrabResult);
+	// 阈值分割
+	void ThresholdImage(bool autoFlag);
 
 signals:
 	void ShowImageSignal(const QPixmap& img);
@@ -79,5 +85,10 @@ private:
 	QTimer* timer_Exposure; // 定时器，用于获取自动曝光时的曝光时间和帧率
 
 	QString EXEPath; // 程序所在路径
+
+	bool hasPicture = false; // 是否有图片
+#if USEOPENCV
+	OpenCVLibrary* m_ImageProcess; // 图像处理对象
+#endif
 };
 #endif // MAINWINDOW_H
