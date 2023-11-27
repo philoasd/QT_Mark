@@ -8,6 +8,8 @@
 
 #include "GlobalDef.h"
 #include <QMessageBox>
+#include <QFileDialog>
+#include <QSettings>
 
 #include <BaslerCamera.h>
 
@@ -46,6 +48,8 @@ private slots:
 
     void on_checkBox_AutoExposure_stateChanged(int arg1);
 
+    void on_pushButton_LoadImage_clicked();
+
 private:
 	// 初始化UI
 	void InitUI();
@@ -72,5 +76,7 @@ private:
 
 	bool isAutoExposure = false; // 是否自动曝光
 	QTimer* timer_Exposure; // 定时器，用于获取自动曝光时的曝光时间和帧率
+
+	QString EXEPath; // 程序所在路径
 };
 #endif // MAINWINDOW_H

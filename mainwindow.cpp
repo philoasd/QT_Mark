@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget* parent)
 	, ui(new Ui::MainWindow)
 {
 	ui->setupUi(this);
+	EXEPath = QCoreApplication::applicationDirPath(); // 获取当前程序的路径
 
 	InitConnect();
 	InitUI();
@@ -109,7 +110,11 @@ void MainWindow::on_actionOpenCameraInterface_triggered()
 	ui->pushButton_DisConnectedCamera->setEnabled(false); // 设置断开相机按钮为不可用
 
 	if (USECAMERA) {
+		ui->groupBox_CameraInfo->setVisible(true); // 显示相机信息组合框
 		InitCamera();
+	}
+	else {
+		ui->groupBox_CameraInfo->setVisible(false); // 隐藏相机信息组合框
 	}
 }
 
@@ -217,7 +222,7 @@ void MainWindow::on_doubleSpinBox_Exposure_valueChanged(double arg1)
 	if (!isAutoExposure) {
 		m_Camera->SetExposureTime(arg1); // 设置曝光时间
 	}
-	
+
 	ui->lineEdit_FrameRate->setText(QString::number(m_Camera->GetFrameRate(), 'f', 1) + " FPS"); // 获取帧率
 }
 
@@ -239,6 +244,25 @@ void MainWindow::on_checkBox_AutoExposure_stateChanged(int arg1)
 	else {
 		timer_Exposure->stop(); // 停止定时器
 		delete timer_Exposure; // 删除定时器
+	}
+}
+
+
+void MainWindow::on_pushButton_LoadImage_clicked()
+{
+	QString imgPath;
+	QSettings settings(EXEPath + "./Config.ini", QSettings::IniFormat); // 创建配置文件对象
+	QString lastPath = settings.value("LastPath").toString(); // 获取上次打开的路径
+	imgPath = QFileDialog::getOpenFileName(this, tr("Load Image"), lastPath, tr("Image Files(*.bmp *.png *.jpg);;All(*.*)"));
+	if (imgPath != "")
+	{
+		ui->lineEdit_ImageFilePath->setText(imgPath);
+		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(QImage(imgPath)));
+		settings.setValue("LastPath", imgPath); // 保存上次打开的路径
+	}
+	else
+	{
+		return;
 	}
 }
 

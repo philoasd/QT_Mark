@@ -84,7 +84,7 @@ public:
     QSpinBox *spinBox_RightThreshold;
     QWidget *tab_2;
     QWidget *tab_3;
-    QGroupBox *groupBox_2;
+    QGroupBox *groupBox_CameraInfo;
     QHBoxLayout *horizontalLayout_9;
     QVBoxLayout *verticalLayout_3;
     QComboBox *comboBox_CameraInfo;
@@ -101,6 +101,11 @@ public:
     QPushButton *pushButton_ConnectedCamera;
     QPushButton *pushButton_DisConnectedCamera;
     QGroupBox *groupBox_3;
+    QGroupBox *groupBox_LoadImage;
+    QHBoxLayout *horizontalLayout_11;
+    QHBoxLayout *horizontalLayout_10;
+    QLineEdit *lineEdit_ImageFilePath;
+    QPushButton *pushButton_LoadImage;
     QMenuBar *menubar;
     QStatusBar *statusbar;
     QToolBar *toolBar_Tool;
@@ -245,7 +250,7 @@ public:
         page_4->setObjectName(QString::fromUtf8("page_4"));
         tabWidget = new QTabWidget(page_4);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(40, 180, 401, 381));
+        tabWidget->setGeometry(QRect(40, 490, 401, 281));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
         tabWidget->setTabPosition(QTabWidget::East);
         tabWidget->setTabShape(QTabWidget::Triangular);
@@ -318,14 +323,14 @@ public:
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
         tabWidget->addTab(tab_3, QString());
-        groupBox_2 = new QGroupBox(page_4);
-        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 60, 351, 111));
-        horizontalLayout_9 = new QHBoxLayout(groupBox_2);
+        groupBox_CameraInfo = new QGroupBox(page_4);
+        groupBox_CameraInfo->setObjectName(QString::fromUtf8("groupBox_CameraInfo"));
+        groupBox_CameraInfo->setGeometry(QRect(100, 60, 351, 111));
+        horizontalLayout_9 = new QHBoxLayout(groupBox_CameraInfo);
         horizontalLayout_9->setObjectName(QString::fromUtf8("horizontalLayout_9"));
         verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
-        comboBox_CameraInfo = new QComboBox(groupBox_2);
+        comboBox_CameraInfo = new QComboBox(groupBox_CameraInfo);
         comboBox_CameraInfo->setObjectName(QString::fromUtf8("comboBox_CameraInfo"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
@@ -337,7 +342,7 @@ public:
 
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
-        checkBox_AutoExposure = new QCheckBox(groupBox_2);
+        checkBox_AutoExposure = new QCheckBox(groupBox_CameraInfo);
         checkBox_AutoExposure->setObjectName(QString::fromUtf8("checkBox_AutoExposure"));
         QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
@@ -351,7 +356,7 @@ public:
 
         horizontalLayout_5->addItem(horizontalSpacer);
 
-        label = new QLabel(groupBox_2);
+        label = new QLabel(groupBox_CameraInfo);
         label->setObjectName(QString::fromUtf8("label"));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Minimum);
         sizePolicy2.setHorizontalStretch(0);
@@ -361,7 +366,7 @@ public:
 
         horizontalLayout_5->addWidget(label);
 
-        doubleSpinBox_Exposure = new QDoubleSpinBox(groupBox_2);
+        doubleSpinBox_Exposure = new QDoubleSpinBox(groupBox_CameraInfo);
         doubleSpinBox_Exposure->setObjectName(QString::fromUtf8("doubleSpinBox_Exposure"));
         doubleSpinBox_Exposure->setAlignment(Qt::AlignCenter);
         doubleSpinBox_Exposure->setDecimals(1);
@@ -375,12 +380,12 @@ public:
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
-        label_3 = new QLabel(groupBox_2);
+        label_3 = new QLabel(groupBox_CameraInfo);
         label_3->setObjectName(QString::fromUtf8("label_3"));
 
         horizontalLayout_4->addWidget(label_3);
 
-        lineEdit_FrameRate = new QLineEdit(groupBox_2);
+        lineEdit_FrameRate = new QLineEdit(groupBox_CameraInfo);
         lineEdit_FrameRate->setObjectName(QString::fromUtf8("lineEdit_FrameRate"));
         sizePolicy2.setHeightForWidth(lineEdit_FrameRate->sizePolicy().hasHeightForWidth());
         lineEdit_FrameRate->setSizePolicy(sizePolicy2);
@@ -401,12 +406,12 @@ public:
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        pushButton_ConnectedCamera = new QPushButton(groupBox_2);
+        pushButton_ConnectedCamera = new QPushButton(groupBox_CameraInfo);
         pushButton_ConnectedCamera->setObjectName(QString::fromUtf8("pushButton_ConnectedCamera"));
 
         verticalLayout_2->addWidget(pushButton_ConnectedCamera);
 
-        pushButton_DisConnectedCamera = new QPushButton(groupBox_2);
+        pushButton_DisConnectedCamera = new QPushButton(groupBox_CameraInfo);
         pushButton_DisConnectedCamera->setObjectName(QString::fromUtf8("pushButton_DisConnectedCamera"));
 
         verticalLayout_2->addWidget(pushButton_DisConnectedCamera);
@@ -416,7 +421,28 @@ public:
 
         groupBox_3 = new QGroupBox(page_4);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        groupBox_3->setGeometry(QRect(70, 590, 341, 231));
+        groupBox_3->setGeometry(QRect(170, 830, 171, 91));
+        groupBox_LoadImage = new QGroupBox(page_4);
+        groupBox_LoadImage->setObjectName(QString::fromUtf8("groupBox_LoadImage"));
+        groupBox_LoadImage->setGeometry(QRect(100, 180, 351, 58));
+        horizontalLayout_11 = new QHBoxLayout(groupBox_LoadImage);
+        horizontalLayout_11->setObjectName(QString::fromUtf8("horizontalLayout_11"));
+        horizontalLayout_10 = new QHBoxLayout();
+        horizontalLayout_10->setObjectName(QString::fromUtf8("horizontalLayout_10"));
+        lineEdit_ImageFilePath = new QLineEdit(groupBox_LoadImage);
+        lineEdit_ImageFilePath->setObjectName(QString::fromUtf8("lineEdit_ImageFilePath"));
+        lineEdit_ImageFilePath->setReadOnly(true);
+
+        horizontalLayout_10->addWidget(lineEdit_ImageFilePath);
+
+        pushButton_LoadImage = new QPushButton(groupBox_LoadImage);
+        pushButton_LoadImage->setObjectName(QString::fromUtf8("pushButton_LoadImage"));
+
+        horizontalLayout_10->addWidget(pushButton_LoadImage);
+
+
+        horizontalLayout_11->addLayout(horizontalLayout_10);
+
         stackedWidget_Parameters->addWidget(page_4);
 
         horizontalLayout->addWidget(stackedWidget_Parameters);
@@ -549,13 +575,15 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Image Process", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Calibration", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Egde Finder", nullptr));
-        groupBox_2->setTitle(QApplication::translate("MainWindow", "Camera Info", nullptr));
+        groupBox_CameraInfo->setTitle(QApplication::translate("MainWindow", "Camera Info", nullptr));
         checkBox_AutoExposure->setText(QApplication::translate("MainWindow", "AutoExposure", nullptr));
         label->setText(QApplication::translate("MainWindow", "Exposure:", nullptr));
         label_3->setText(QApplication::translate("MainWindow", "Frame Rate:", nullptr));
         pushButton_ConnectedCamera->setText(QApplication::translate("MainWindow", "Connected", nullptr));
         pushButton_DisConnectedCamera->setText(QApplication::translate("MainWindow", "DisConnected", nullptr));
         groupBox_3->setTitle(QApplication::translate("MainWindow", "Motion", nullptr));
+        groupBox_LoadImage->setTitle(QApplication::translate("MainWindow", "Load Image", nullptr));
+        pushButton_LoadImage->setText(QApplication::translate("MainWindow", "load Image", nullptr));
         toolBar_Tool->setWindowTitle(QApplication::translate("MainWindow", "toolBar", nullptr));
         toolBar_Shapes->setWindowTitle(QApplication::translate("MainWindow", "toolBar", nullptr));
         toolBar_Camera->setWindowTitle(QApplication::translate("MainWindow", "toolBar", nullptr));
