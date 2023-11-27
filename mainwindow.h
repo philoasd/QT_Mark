@@ -61,7 +61,7 @@ private:
 	void InitCamera();
 	// 显示图像
 	void ShowImage(const CGrabResultPtr& ptrGrabResult);
-	// 图像转换
+	// 将Basler图像转换为QImage
 	QImage ConvertBalserToQImage(const CGrabResultPtr& ptrGrabResult);
 
 signals:
@@ -73,6 +73,7 @@ private:
 	BaslerCamera* m_Camera; // 相机对象
 	ImageEventHandler* m_ImageEventHandler; // 图像事件处理器
 	ImageEventHandler::ImageCallback m_ImageCallback; // 图像回调函数
+	QImage m_ptrGrabResult; // 图像缓冲区,用于存储图像
 
 	bool isAutoExposure = false; // 是否自动曝光
 	QTimer* timer_Exposure; // 定时器，用于获取自动曝光时的曝光时间和帧率

@@ -86,6 +86,7 @@ void MainWindow::ShowImage(const CGrabResultPtr& ptrGrabResult)
 {
 	if (ptrGrabResult->GrabSucceeded()) {
 		QImage img = ConvertBalserToQImage(ptrGrabResult); // 将Basler图像原始数据转换为QImage
+		m_ptrGrabResult = img.copy(); // 将QImage赋值给图像缓冲区
 		emit ShowImageSignal(QPixmap::fromImage(img)); // 发送显示图像信号
 	}
 }
@@ -257,7 +258,9 @@ void MainWindow::on_pushButton_LoadImage_clicked()
 	if (imgPath != "")
 	{
 		ui->lineEdit_ImageFilePath->setText(imgPath);
-		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(QImage(imgPath)));
+		QImage img(imgPath);
+		m_ptrGrabResult = img.copy(); // 将QImage赋值给图像缓冲区
+		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(img));
 		settings.setValue("LastPath", imgPath); // 保存上次打开的路径
 	}
 	else
