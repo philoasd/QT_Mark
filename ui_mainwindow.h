@@ -83,6 +83,20 @@ public:
     QSpinBox *spinBox_LeftThreshold;
     QxtSpanSlider *horizontalSlider_Threshold;
     QSpinBox *spinBox_RightThreshold;
+    QGroupBox *groupBox_2;
+    QVBoxLayout *verticalLayout_5;
+    QHBoxLayout *horizontalLayout_12;
+    QLabel *label_4;
+    QComboBox *comboBox_KernelShape;
+    QSpacerItem *horizontalSpacer_4;
+    QHBoxLayout *horizontalLayout_13;
+    QLabel *label_5;
+    QSpinBox *spinBox_KernelSize;
+    QSpacerItem *horizontalSpacer_3;
+    QHBoxLayout *horizontalLayout_14;
+    QLabel *label_6;
+    QComboBox *comboBox_MorphologicalOperations;
+    QPushButton *pushButton_MorphologicalOperations;
     QWidget *tab_2;
     QWidget *tab_3;
     QGroupBox *groupBox_3;
@@ -253,7 +267,7 @@ public:
         page_4->setObjectName(QString::fromUtf8("page_4"));
         tabWidget = new QTabWidget(page_4);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(50, 300, 401, 281));
+        tabWidget->setGeometry(QRect(50, 270, 431, 371));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
         tabWidget->setTabPosition(QTabWidget::East);
         tabWidget->setTabShape(QTabWidget::Triangular);
@@ -261,7 +275,7 @@ public:
         tab_1->setObjectName(QString::fromUtf8("tab_1"));
         groupBox = new QGroupBox(tab_1);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(20, 20, 321, 121));
+        groupBox->setGeometry(QRect(30, 20, 321, 121));
         horizontalLayout_8 = new QHBoxLayout(groupBox);
         horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
         verticalLayout = new QVBoxLayout();
@@ -319,6 +333,98 @@ public:
 
         horizontalLayout_8->addLayout(verticalLayout);
 
+        groupBox_2 = new QGroupBox(tab_1);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        groupBox_2->setGeometry(QRect(30, 150, 331, 151));
+        verticalLayout_5 = new QVBoxLayout(groupBox_2);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        horizontalLayout_12 = new QHBoxLayout();
+        horizontalLayout_12->setObjectName(QString::fromUtf8("horizontalLayout_12"));
+        label_4 = new QLabel(groupBox_2);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label_4->sizePolicy().hasHeightForWidth());
+        label_4->setSizePolicy(sizePolicy);
+        label_4->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+
+        horizontalLayout_12->addWidget(label_4);
+
+        comboBox_KernelShape = new QComboBox(groupBox_2);
+        comboBox_KernelShape->addItem(QString());
+        comboBox_KernelShape->addItem(QString());
+        comboBox_KernelShape->addItem(QString());
+        comboBox_KernelShape->setObjectName(QString::fromUtf8("comboBox_KernelShape"));
+
+        horizontalLayout_12->addWidget(comboBox_KernelShape);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_12->addItem(horizontalSpacer_4);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_12);
+
+        horizontalLayout_13 = new QHBoxLayout();
+        horizontalLayout_13->setObjectName(QString::fromUtf8("horizontalLayout_13"));
+        label_5 = new QLabel(groupBox_2);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+
+        horizontalLayout_13->addWidget(label_5);
+
+        spinBox_KernelSize = new QSpinBox(groupBox_2);
+        spinBox_KernelSize->setObjectName(QString::fromUtf8("spinBox_KernelSize"));
+        spinBox_KernelSize->setAlignment(Qt::AlignCenter);
+        spinBox_KernelSize->setMinimum(1);
+        spinBox_KernelSize->setMaximum(20);
+        spinBox_KernelSize->setValue(3);
+
+        horizontalLayout_13->addWidget(spinBox_KernelSize);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_13->addItem(horizontalSpacer_3);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_13);
+
+        horizontalLayout_14 = new QHBoxLayout();
+        horizontalLayout_14->setObjectName(QString::fromUtf8("horizontalLayout_14"));
+        label_6 = new QLabel(groupBox_2);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        sizePolicy.setHeightForWidth(label_6->sizePolicy().hasHeightForWidth());
+        label_6->setSizePolicy(sizePolicy);
+
+        horizontalLayout_14->addWidget(label_6);
+
+        comboBox_MorphologicalOperations = new QComboBox(groupBox_2);
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->addItem(QString());
+        comboBox_MorphologicalOperations->setObjectName(QString::fromUtf8("comboBox_MorphologicalOperations"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(comboBox_MorphologicalOperations->sizePolicy().hasHeightForWidth());
+        comboBox_MorphologicalOperations->setSizePolicy(sizePolicy1);
+
+        horizontalLayout_14->addWidget(comboBox_MorphologicalOperations);
+
+        pushButton_MorphologicalOperations = new QPushButton(groupBox_2);
+        pushButton_MorphologicalOperations->setObjectName(QString::fromUtf8("pushButton_MorphologicalOperations"));
+
+        horizontalLayout_14->addWidget(pushButton_MorphologicalOperations);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_14);
+
         tabWidget->addTab(tab_1, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
@@ -344,11 +450,11 @@ public:
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         comboBox_CameraInfo = new QComboBox(groupBox_CameraInfo);
         comboBox_CameraInfo->setObjectName(QString::fromUtf8("comboBox_CameraInfo"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(comboBox_CameraInfo->sizePolicy().hasHeightForWidth());
-        comboBox_CameraInfo->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(comboBox_CameraInfo->sizePolicy().hasHeightForWidth());
+        comboBox_CameraInfo->setSizePolicy(sizePolicy2);
 
         verticalLayout_3->addWidget(comboBox_CameraInfo);
 
@@ -356,11 +462,11 @@ public:
         horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
         checkBox_AutoExposure = new QCheckBox(groupBox_CameraInfo);
         checkBox_AutoExposure->setObjectName(QString::fromUtf8("checkBox_AutoExposure"));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(checkBox_AutoExposure->sizePolicy().hasHeightForWidth());
-        checkBox_AutoExposure->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy3(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(checkBox_AutoExposure->sizePolicy().hasHeightForWidth());
+        checkBox_AutoExposure->setSizePolicy(sizePolicy3);
 
         horizontalLayout_5->addWidget(checkBox_AutoExposure);
 
@@ -370,11 +476,11 @@ public:
 
         label = new QLabel(groupBox_CameraInfo);
         label->setObjectName(QString::fromUtf8("label"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy4(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy4);
 
         horizontalLayout_5->addWidget(label);
 
@@ -399,8 +505,8 @@ public:
 
         lineEdit_FrameRate = new QLineEdit(groupBox_CameraInfo);
         lineEdit_FrameRate->setObjectName(QString::fromUtf8("lineEdit_FrameRate"));
-        sizePolicy2.setHeightForWidth(lineEdit_FrameRate->sizePolicy().hasHeightForWidth());
-        lineEdit_FrameRate->setSizePolicy(sizePolicy2);
+        sizePolicy4.setHeightForWidth(lineEdit_FrameRate->sizePolicy().hasHeightForWidth());
+        lineEdit_FrameRate->setSizePolicy(sizePolicy4);
         lineEdit_FrameRate->setAlignment(Qt::AlignCenter);
         lineEdit_FrameRate->setReadOnly(true);
 
@@ -586,6 +692,24 @@ public:
         groupBox->setTitle(QApplication::translate("MainWindow", "Threshold", nullptr));
         checkBox_AutoThreshold->setText(QApplication::translate("MainWindow", "Auto", nullptr));
         checkBox_ManualThreshold->setText(QApplication::translate("MainWindow", "Manual", nullptr));
+        groupBox_2->setTitle(QApplication::translate("MainWindow", "Morphological Operations", nullptr));
+        label_4->setText(QApplication::translate("MainWindow", "Kernel Shape:", nullptr));
+        comboBox_KernelShape->setItemText(0, QApplication::translate("MainWindow", "RECT", nullptr));
+        comboBox_KernelShape->setItemText(1, QApplication::translate("MainWindow", "CROSS", nullptr));
+        comboBox_KernelShape->setItemText(2, QApplication::translate("MainWindow", "ELLIPSE", nullptr));
+
+        label_5->setText(QApplication::translate("MainWindow", "Kernel Size:", nullptr));
+        label_6->setText(QApplication::translate("MainWindow", "Operation:", nullptr));
+        comboBox_MorphologicalOperations->setItemText(0, QApplication::translate("MainWindow", "Dilate(Fill a hole)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(1, QApplication::translate("MainWindow", "Erode(Remove noise)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(2, QApplication::translate("MainWindow", "Opene(Remove small objects)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(3, QApplication::translate("MainWindow", "Close(Fill small holes/noise)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(4, QApplication::translate("MainWindow", "Gradient(Get the contour)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(5, QApplication::translate("MainWindow", "TopHat(Get the noise)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(6, QApplication::translate("MainWindow", "BlackHat(Get small objects)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(7, QApplication::translate("MainWindow", "Hitmiss(Detecting specific shapes)", nullptr));
+
+        pushButton_MorphologicalOperations->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Image Process", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Calibration", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Egde Finder", nullptr));

@@ -91,9 +91,9 @@
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>300</y>
-          <width>401</width>
-          <height>281</height>
+          <y>270</y>
+          <width>431</width>
+          <height>371</height>
          </rect>
         </property>
         <property name="layoutDirection">
@@ -115,7 +115,7 @@
          <widget class="QGroupBox" name="groupBox">
           <property name="geometry">
            <rect>
-            <x>20</x>
+            <x>30</x>
             <y>20</y>
             <width>321</width>
             <height>121</height>
@@ -190,6 +190,196 @@
                 </widget>
                </item>
               </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="geometry">
+           <rect>
+            <x>30</x>
+            <y>150</y>
+            <width>331</width>
+            <height>151</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Morphological Operations</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_12">
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Kernel Shape:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBox_KernelShape">
+               <item>
+                <property name="text">
+                 <string>RECT</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>CROSS</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>ELLIPSE</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_13">
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Kernel Size:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="spinBox_KernelSize">
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="minimum">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <number>20</number>
+               </property>
+               <property name="value">
+                <number>3</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Expanding</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Operation:</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="comboBox_MorphologicalOperations">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Dilate(Fill a hole)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Erode(Remove noise)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Opene(Remove small objects)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Close(Fill small holes/noise)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Gradient(Get the contour)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>TopHat(Get the noise)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>BlackHat(Get small objects)</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Hitmiss(Detecting specific shapes)</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_MorphologicalOperations">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

@@ -59,6 +59,10 @@ private slots:
 
 	void on_spinBox_RightThreshold_valueChanged(int arg1);
 
+    void on_pushButton_MorphologicalOperations_clicked();
+
+    void on_comboBox_KernelShape_currentIndexChanged(int index);
+
 private:
 	// 初始化UI
 	void InitUI();
@@ -86,7 +90,9 @@ private:
 	BaslerCamera* m_Camera; // 相机对象
 	ImageEventHandler* m_ImageEventHandler; // 图像事件处理器
 	ImageEventHandler::ImageCallback m_ImageCallback; // 图像回调函数
+
 	QImage m_ptrGrabResult; // 图像缓冲区,用于存储图像
+	cv::Mat m_cvImage; // opencv图像缓冲区,用于存储经过opencv处理后的图像，便于多个处理方法对于同一个图像的处理
 
 	bool isAutoExposure = false; // 是否自动曝光
 	QTimer* timer_Exposure; // 定时器，用于获取自动曝光时的曝光时间和帧率

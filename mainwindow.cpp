@@ -107,6 +107,7 @@ void MainWindow::ThresholdImage(bool autoFlag)
 		else {
 			thresholdImage = m_ImageProcess->Threshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult), ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
 		}
+		m_cvImage = thresholdImage.clone(); // 将Mat赋值给图像缓冲区
 
 		if ((ui->spinBox_LeftThreshold->value() == 0) && (ui->spinBox_RightThreshold->value() == 255) && !autoFlag) {
 			// 如果左阈值为0，右阈值为255，则显示原图
@@ -362,5 +363,79 @@ void MainWindow::on_spinBox_LeftThreshold_valueChanged(int arg1)
 void MainWindow::on_spinBox_RightThreshold_valueChanged(int arg1)
 {
 	ThresholdImage(false); // 手动阈值分割
+}
+
+
+void MainWindow::on_pushButton_MorphologicalOperations_clicked()
+{
+	if (m_cvImage.empty())
+	{
+		QMessageBox::warning(this, "Warning", "Firse need to morpholog the image!!!"); // 弹出警告对话框
+		return;
+	}
+
+	cv::Mat morphologicalImage; // 形态学图像
+	switch (ui->comboBox_MorphologicalOperations->currentIndex())
+	{
+	case 0: {
+		morphologicalImage = m_ImageProcess->Dilate(m_cvImage, ui->spinBox_KernelSize->value()); // 膨胀
+		break;
+	}
+	case 1: {
+		morphologicalImage = m_ImageProcess->Erode(m_cvImage, ui->spinBox_KernelSize->value()); // 腐蚀
+		break;
+	}
+	case 2: {
+		morphologicalImage = m_ImageProcess->Open(m_cvImage, ui->spinBox_KernelSize->value()); // 开运算
+		break;
+	}
+	case 3: {
+		morphologicalImage = m_ImageProcess->Close(m_cvImage, ui->spinBox_KernelSize->value()); // 闭运算
+		break;
+	}
+	case 4: {
+		morphologicalImage = m_ImageProcess->Gradient(m_cvImage, ui->spinBox_KernelSize->value()); // 形态学梯度
+		break;
+	}
+	case 5: {
+		morphologicalImage = m_ImageProcess->TopHat(m_cvImage, ui->spinBox_KernelSize->value()); // 顶帽
+		break;
+	}
+	case 6: {
+		morphologicalImage = m_ImageProcess->BlackHat(m_cvImage, ui->spinBox_KernelSize->value()); // 黑帽
+		break;
+	}
+	case 7: {
+		morphologicalImage = m_ImageProcess->Hitmiss(m_cvImage, ui->spinBox_KernelSize->value()); // 骨架
+		break;
+	}
+	default: { // 默认显示原图
+		morphologicalImage = m_cvImage;
+		break;
+	}
+	}
+
+	// 显示形态学图像
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(morphologicalImage)));
+}
+
+
+void MainWindow::on_comboBox_KernelShape_currentIndexChanged(int index)
+{
+	switch (index)
+	{
+	case 0: {
+		m_ImageProcess->morphShape = cv::MORPH_RECT; // 矩形
+		break;
+	}
+	case 1: {
+		m_ImageProcess->morphShape = cv::MORPH_CROSS; // 十字形
+		break;
+	}
+	case 2: {
+		m_ImageProcess->morphShape = cv::MORPH_ELLIPSE; // 椭圆形
+		break;
+	}
+	}
 }
 
