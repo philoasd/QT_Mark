@@ -1,4 +1,6 @@
-﻿#include "mainwindow.h"
+﻿#pragma execution_character_set("utf-8")
+
+#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget* parent)
@@ -7,6 +9,7 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	ui->setupUi(this);
 	EXEPath = QCoreApplication::applicationDirPath(); // 获取当前程序的路径
+	qInstallMessageHandler(Logging); // 安装日志记录函数
 
 	InitConnect();
 	InitUI();
@@ -30,6 +33,8 @@ void MainWindow::InitUI()
 	InitStatusBar(); // 初始化状态栏
 
 	ui->checkBox_AutoExposure->setEnabled(false); // 设置自动曝光为不可用
+
+	qDebug("app start!!!");
 }
 
 void MainWindow::InitConnect()
@@ -108,9 +113,59 @@ void MainWindow::ThresholdImage(bool autoFlag)
 			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ptrGrabResult));
 		}
 		else {
-			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(thresholdImage))); // 显示图像
+			// 显示阈值图像
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(thresholdImage)));
 		}
 	}
+}
+
+void MainWindow::Logging(QtMsgType type, const QMessageLogContext& context, const QString& str)
+{
+	static QMutex mutex;
+	mutex.lock(); // 上锁
+
+	QString text;
+	switch (type) {
+	case QtDebugMsg: {
+		text = QString("(Debug): ");
+		break;
+	}
+	case QtWarningMsg: {
+		text = QString("(Warning): ");
+		break;
+	}
+	case QtCriticalMsg: {
+		text = QString("(Critical): ");
+		break;
+	}
+	case QtFatalMsg: {
+		text = QString("(Fatal): ");
+		break;
+	}
+	}
+
+	QString context_info = QString("File:(%1) Line:(%2)").arg(QString(context.file)).arg(context.line); // 输出信息的文件名和行数
+	// 输出当前的日期和时间
+	QString current_date_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss ddd");
+	QString fileName = QCoreApplication::applicationDirPath() + "/Log/" + QDateTime::currentDateTime().toString("yyyy-MM-dd") + ".txt";
+	QString current_date = QString("%1").arg(current_date_time);
+
+	QString message = QString("%1 %2 %3 %4").arg(current_date).arg(text).arg(context_info).arg(str); // 最终要输出的信息
+
+	QFile file(fileName); // 创建日志文件对象
+	QDir dir;
+	// 如果日志文件夹不存在，则创建
+	if (!dir.exists(QFileInfo(fileName).path())) {
+		dir.mkpath(QFileInfo(fileName).path()); // 创建日志文件夹
+	}
+	file.open(QIODevice::WriteOnly | QIODevice::Append); // 以只写的方式打开日志文件
+
+	QTextStream text_stream(&file); // 创建文本流对象
+	text_stream << message << "\r\n"; // 将信息写入文本流
+	file.flush(); // 将信息刷新到文件中
+	file.close(); // 关闭文件
+
+	mutex.unlock(); // 解锁
 }
 
 

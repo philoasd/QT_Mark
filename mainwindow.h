@@ -10,6 +10,9 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QSettings>
+#include <QMutex>
+#include <QTextStream>
+
 #include "ImageConvert.h"
 
 #include <BaslerCamera.h>
@@ -52,9 +55,9 @@ private slots:
 
 	void on_pushButton_LoadImage_clicked();
 
-    void on_spinBox_LeftThreshold_valueChanged(int arg1);
+	void on_spinBox_LeftThreshold_valueChanged(int arg1);
 
-    void on_spinBox_RightThreshold_valueChanged(int arg1);
+	void on_spinBox_RightThreshold_valueChanged(int arg1);
 
 private:
 	// 初始化UI
@@ -69,6 +72,10 @@ private:
 	void ShowImage(const CGrabResultPtr& ptrGrabResult);
 	// 阈值分割
 	void ThresholdImage(bool autoFlag);
+
+public:
+	// 记录日志
+	static void Logging(QtMsgType type, const QMessageLogContext& context, const QString& str);
 
 signals:
 	void ShowImageSignal(const QPixmap& img);

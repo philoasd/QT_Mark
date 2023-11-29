@@ -9,5 +9,6 @@ int main(int argc, char *argv[])
     // 最大化
     w.showMaximized();
     w.show();
+
     return a.exec();
 }
