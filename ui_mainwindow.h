@@ -709,7 +709,7 @@ public:
         comboBox_MorphologicalOperations->setItemText(6, QApplication::translate("MainWindow", "BlackHat(Get small objects)", nullptr));
         comboBox_MorphologicalOperations->setItemText(7, QApplication::translate("MainWindow", "Hitmiss(Detecting specific shapes)", nullptr));
 
-        pushButton_MorphologicalOperations->setText(QApplication::translate("MainWindow", "PushButton", nullptr));
+        pushButton_MorphologicalOperations->setText(QApplication::translate("MainWindow", "Run Operation", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Image Process", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Calibration", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Egde Finder", nullptr));

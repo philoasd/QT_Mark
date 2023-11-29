@@ -377,7 +377,7 @@
              <item>
               <widget class="QPushButton" name="pushButton_MorphologicalOperations">
                <property name="text">
-                <string>PushButton</string>
+                <string>Run Operation</string>
                </property>
               </widget>
              </item>

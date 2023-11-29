@@ -91,8 +91,11 @@ private:
 	ImageEventHandler* m_ImageEventHandler; // 图像事件处理器
 	ImageEventHandler::ImageCallback m_ImageCallback; // 图像回调函数
 
-	QImage m_ptrGrabResult; // 图像缓冲区,用于存储图像
-	cv::Mat m_cvImage; // opencv图像缓冲区,用于存储经过opencv处理后的图像，便于多个处理方法对于同一个图像的处理
+#pragma region 图像变量
+	QImage m_ptrGrabResult; // 图像缓冲区,用于存储原始图像
+	cv::Mat afterThresholdImage; // 用于存储阈值分割后的图像
+	cv::Mat afterMorphologicalImage; // 用于存储形态学操作后的图像
+#pragma endregion
 
 	bool isAutoExposure = false; // 是否自动曝光
 	QTimer* timer_Exposure; // 定时器，用于获取自动曝光时的曝光时间和帧率

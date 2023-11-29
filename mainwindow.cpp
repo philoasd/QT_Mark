@@ -100,14 +100,12 @@ void MainWindow::ShowImage(const CGrabResultPtr& ptrGrabResult)
 void MainWindow::ThresholdImage(bool autoFlag)
 {
 	if (hasPicture) {
-		cv::Mat thresholdImage; // 阈值图像
 		if (autoFlag) {
-			thresholdImage = m_ImageProcess->AutoThreshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult)); // 自动阈值分割
+			afterThresholdImage = m_ImageProcess->AutoThreshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult)); // 自动阈值分割
 		}
 		else {
-			thresholdImage = m_ImageProcess->Threshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult), ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
+			afterThresholdImage = m_ImageProcess->Threshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult), ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
 		}
-		m_cvImage = thresholdImage.clone(); // 将Mat赋值给图像缓冲区
 
 		if ((ui->spinBox_LeftThreshold->value() == 0) && (ui->spinBox_RightThreshold->value() == 255) && !autoFlag) {
 			// 如果左阈值为0，右阈值为255，则显示原图
@@ -115,7 +113,7 @@ void MainWindow::ThresholdImage(bool autoFlag)
 		}
 		else {
 			// 显示阈值图像
-			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(thresholdImage)));
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(afterThresholdImage)));
 		}
 	}
 }
@@ -368,55 +366,54 @@ void MainWindow::on_spinBox_RightThreshold_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 {
-	if (m_cvImage.empty())
+	if (afterThresholdImage.empty())
 	{
 		QMessageBox::warning(this, "Warning", "Firse need to morpholog the image!!!"); // 弹出警告对话框
 		return;
 	}
 
-	cv::Mat morphologicalImage; // 形态学图像
 	switch (ui->comboBox_MorphologicalOperations->currentIndex())
 	{
 	case 0: {
-		morphologicalImage = m_ImageProcess->Dilate(m_cvImage, ui->spinBox_KernelSize->value()); // 膨胀
+		afterMorphologicalImage = m_ImageProcess->Dilate(afterThresholdImage, ui->spinBox_KernelSize->value()); // 膨胀
 		break;
 	}
 	case 1: {
-		morphologicalImage = m_ImageProcess->Erode(m_cvImage, ui->spinBox_KernelSize->value()); // 腐蚀
+		afterMorphologicalImage = m_ImageProcess->Erode(afterThresholdImage, ui->spinBox_KernelSize->value()); // 腐蚀
 		break;
 	}
 	case 2: {
-		morphologicalImage = m_ImageProcess->Open(m_cvImage, ui->spinBox_KernelSize->value()); // 开运算
+		afterMorphologicalImage = m_ImageProcess->Open(afterThresholdImage, ui->spinBox_KernelSize->value()); // 开运算
 		break;
 	}
 	case 3: {
-		morphologicalImage = m_ImageProcess->Close(m_cvImage, ui->spinBox_KernelSize->value()); // 闭运算
+		afterMorphologicalImage = m_ImageProcess->Close(afterThresholdImage, ui->spinBox_KernelSize->value()); // 闭运算
 		break;
 	}
 	case 4: {
-		morphologicalImage = m_ImageProcess->Gradient(m_cvImage, ui->spinBox_KernelSize->value()); // 形态学梯度
+		afterMorphologicalImage = m_ImageProcess->Gradient(afterThresholdImage, ui->spinBox_KernelSize->value()); // 形态学梯度
 		break;
 	}
 	case 5: {
-		morphologicalImage = m_ImageProcess->TopHat(m_cvImage, ui->spinBox_KernelSize->value()); // 顶帽
+		afterMorphologicalImage = m_ImageProcess->TopHat(afterThresholdImage, ui->spinBox_KernelSize->value()); // 顶帽
 		break;
 	}
 	case 6: {
-		morphologicalImage = m_ImageProcess->BlackHat(m_cvImage, ui->spinBox_KernelSize->value()); // 黑帽
+		afterMorphologicalImage = m_ImageProcess->BlackHat(afterThresholdImage, ui->spinBox_KernelSize->value()); // 黑帽
 		break;
 	}
 	case 7: {
-		morphologicalImage = m_ImageProcess->Hitmiss(m_cvImage, ui->spinBox_KernelSize->value()); // 骨架
+		afterMorphologicalImage = m_ImageProcess->Hitmiss(afterThresholdImage, ui->spinBox_KernelSize->value()); // 骨架
 		break;
 	}
 	default: { // 默认显示原图
-		morphologicalImage = m_cvImage;
+		afterMorphologicalImage = afterThresholdImage;
 		break;
 	}
 	}
 
 	// 显示形态学图像
-	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(morphologicalImage)));
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(afterMorphologicalImage)));
 }
 
 
