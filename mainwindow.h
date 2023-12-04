@@ -16,7 +16,10 @@
 #include "ImageConvert.h"
 
 #include <BaslerCamera.h>
+
+#if USEOPENCV
 #include <OpenCVLibrary.h>
+#endif
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -59,9 +62,11 @@ private slots:
 
 	void on_spinBox_RightThreshold_valueChanged(int arg1);
 
-    void on_pushButton_MorphologicalOperations_clicked();
+	void on_pushButton_MorphologicalOperations_clicked();
 
-    void on_comboBox_KernelShape_currentIndexChanged(int index);
+	void on_comboBox_KernelShape_currentIndexChanged(int index);
+
+	void on_pushButton_ImageRotation_clicked();
 
 private:
 	// 初始化UI
@@ -76,6 +81,20 @@ private:
 	void ShowImage(const CGrabResultPtr& ptrGrabResult);
 	// 阈值分割
 	void ThresholdImage(bool autoFlag);
+	/// <summary>
+	/// 保存配置
+	/// </summary>
+	/// <param name="valueName">配置名</param>
+	/// <param name="value">配置值</param>
+	/// <param name="groupName">配置组（如果没有，则为默认）</param>
+	void SaveConfig(QString valueName, QVariant value, QString groupName = "");
+	/// <summary>
+	/// 加载配置
+	/// </summary>
+	/// <param name="valueName">配置名</param>
+	/// <param name="groupName">>配置组（如果没有，则为默认）</param>
+	/// <returns></returns>
+	QVariant LoadConfig(QString valueName, QString groupName = "");
 
 public:
 	// 记录日志
@@ -92,9 +111,18 @@ private:
 	ImageEventHandler::ImageCallback m_ImageCallback; // 图像回调函数
 
 #pragma region 图像变量
-	QImage m_ptrGrabResult; // 图像缓冲区,用于存储原始图像
-	cv::Mat afterThresholdImage; // 用于存储阈值分割后的图像
-	cv::Mat afterMorphologicalImage; // 用于存储形态学操作后的图像
+	enum ImageProcessStep
+	{
+		none = 0,
+		loadImage,
+		threshold,
+		morphological,
+		rotate,
+		enhancement,
+		denoising
+	}m_ImageProcessStep; // 图像处理步骤
+	cv::Mat m_ImageProcessResult[6]; // 图像处理结果：0-原图，1-阈值分割，2-形态学操作，3-旋转，4-增强，5-去噪
+	QImage test; // 测试用
 #pragma endregion
 
 	bool isAutoExposure = false; // 是否自动曝光
@@ -102,7 +130,6 @@ private:
 
 	QString EXEPath; // 程序所在路径
 
-	bool hasPicture = false; // 是否有图片
 #if USEOPENCV
 	OpenCVLibrary* m_ImageProcess; // 图像处理对象
 #endif

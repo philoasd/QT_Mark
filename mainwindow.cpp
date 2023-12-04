@@ -27,6 +27,8 @@ void MainWindow::InitUI()
 	ui->stackedWidget->setCurrentIndex(0); // 切换到激光界面
 	ui->stackedWidget_Parameters->setCurrentIndex(0); // 切换到激光参数界面
 
+	m_ImageProcessStep = ImageProcessStep::none; // 设置图像处理步骤为无
+
 	ui->horizontalSlider_Threshold->setLowerValue(0); // 设置滑动条的左边值
 	ui->horizontalSlider_Threshold->setUpperValue(255); // 设置滑动条的右边值
 
@@ -91,31 +93,59 @@ void MainWindow::ShowImage(const CGrabResultPtr& ptrGrabResult)
 {
 	if (ptrGrabResult->GrabSucceeded()) {
 		QImage img = ImageConvert::ConvertBalserToQImage(ptrGrabResult); // 将Basler图像原始数据转换为QImage
-		m_ptrGrabResult = img.copy(); // 将QImage赋值给图像缓冲区
+		m_ImageProcessResult[0] = ImageConvert::ConvertQImageToMat(img); // 将QImage赋值给图像缓冲区
 		emit ShowImageSignal(QPixmap::fromImage(img)); // 发送显示图像信号
-		hasPicture = true;
+		m_ImageProcessStep = ImageProcessStep::loadImage; // 设置图像处理步骤为加载图像
 	}
 }
 
 void MainWindow::ThresholdImage(bool autoFlag)
 {
-	if (hasPicture) {
+	if (m_ImageProcessStep != ImageProcessStep::none) {
 		if (autoFlag) {
-			afterThresholdImage = m_ImageProcess->AutoThreshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult)); // 自动阈值分割
+			m_ImageProcessResult[1] = m_ImageProcess->AutoThreshold(m_ImageProcessResult[0]); // 自动阈值分割
 		}
 		else {
-			afterThresholdImage = m_ImageProcess->Threshold(ImageConvert::ConvertQImageToMat(m_ptrGrabResult), ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
+			m_ImageProcessResult[1] = m_ImageProcess->Threshold(m_ImageProcessResult[0], ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
 		}
 
 		if ((ui->spinBox_LeftThreshold->value() == 0) && (ui->spinBox_RightThreshold->value() == 255) && !autoFlag) {
 			// 如果左阈值为0，右阈值为255，则显示原图
-			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ptrGrabResult));
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[0])));
 		}
 		else {
 			// 显示阈值图像
-			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(afterThresholdImage)));
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[1])));
 		}
+
+		m_ImageProcessStep = ImageProcessStep::threshold; // 设置图像处理步骤为阈值分割
 	}
+}
+
+void MainWindow::SaveConfig(QString valueName, QVariant value, QString groupName)
+{
+	QSettings settings(EXEPath + "./Config.ini", QSettings::IniFormat); // 创建配置文件对象
+
+	if (groupName != "") {
+		settings.beginGroup(groupName); // 开始组
+	}
+	settings.setValue(valueName, value); // 保存值
+	if (groupName != "") {
+		settings.endGroup(); // 结束组
+	}
+}
+
+QVariant MainWindow::LoadConfig(QString valueName, QString groupName)
+{
+	QSettings settings(EXEPath + "./Config.ini", QSettings::IniFormat); // 创建配置文件对象
+	if (groupName != "") {
+		settings.beginGroup(groupName); // 开始组
+	}
+	QVariant value = settings.value(valueName).toString(); // 获取上次打开的路径
+	if (groupName != "") {
+		settings.endGroup(); // 结束组
+	}
+	return value;
 }
 
 void MainWindow::Logging(QtMsgType type, const QMessageLogContext& context, const QString& str)
@@ -332,17 +362,17 @@ void MainWindow::on_checkBox_AutoExposure_stateChanged(int arg1)
 void MainWindow::on_pushButton_LoadImage_clicked()
 {
 	QString imgPath;
-	QSettings settings(EXEPath + "./Config.ini", QSettings::IniFormat); // 创建配置文件对象
-	QString lastPath = settings.value("LastPath").toString(); // 获取上次打开的路径
-	imgPath = QFileDialog::getOpenFileName(this, tr("Load Image"), lastPath, tr("Image Files(*.bmp *.png *.jpg);;All(*.*)"));
+	QString LastOpenImagePath = LoadConfig("LastOpenImagePath").toString(); // 获取上次打开的路径
+	imgPath = QFileDialog::getOpenFileName(this, tr("Load Image"), LastOpenImagePath, tr("Image Files(*.bmp *.png *.jpg);;All(*.*)"));
 	if (imgPath != "")
 	{
 		ui->lineEdit_ImageFilePath->setText(imgPath);
 		QImage img(imgPath);
-		m_ptrGrabResult = img.copy(); // 将QImage赋值给图像缓冲区
-		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(img));
-		settings.setValue("LastPath", imgPath); // 保存上次打开的路径
-		hasPicture = true;
+		m_ImageProcessResult[0] = ImageConvert::ConvertQImageToMat(img); // 将QImage赋值给图像缓冲区
+		test = img;
+		m_ImageProcessStep = ImageProcessStep::loadImage; // 设置图像处理步骤为加载图像
+		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[0])));
+		SaveConfig("LastOpenImagePath", imgPath); // 保存上次打开的路径
 		ui->checkBox_ManualThreshold->setChecked(true);
 	}
 	else
@@ -366,7 +396,7 @@ void MainWindow::on_spinBox_RightThreshold_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 {
-	if (afterThresholdImage.empty())
+	if (m_ImageProcessResult[1].empty()) // 如果阈值图像为空
 	{
 		QMessageBox::warning(this, "Warning", "Firse need to morpholog the image!!!"); // 弹出警告对话框
 		return;
@@ -375,45 +405,46 @@ void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 	switch (ui->comboBox_MorphologicalOperations->currentIndex())
 	{
 	case 0: {
-		afterMorphologicalImage = m_ImageProcess->Dilate(afterThresholdImage, ui->spinBox_KernelSize->value()); // 膨胀
+		m_ImageProcessResult[2] = m_ImageProcess->Dilate(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 膨胀
 		break;
 	}
 	case 1: {
-		afterMorphologicalImage = m_ImageProcess->Erode(afterThresholdImage, ui->spinBox_KernelSize->value()); // 腐蚀
+		m_ImageProcessResult[2] = m_ImageProcess->Erode(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 腐蚀
 		break;
 	}
 	case 2: {
-		afterMorphologicalImage = m_ImageProcess->Open(afterThresholdImage, ui->spinBox_KernelSize->value()); // 开运算
+		m_ImageProcessResult[2] = m_ImageProcess->Open(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 开运算
 		break;
 	}
 	case 3: {
-		afterMorphologicalImage = m_ImageProcess->Close(afterThresholdImage, ui->spinBox_KernelSize->value()); // 闭运算
+		m_ImageProcessResult[2] = m_ImageProcess->Close(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 闭运算
 		break;
 	}
 	case 4: {
-		afterMorphologicalImage = m_ImageProcess->Gradient(afterThresholdImage, ui->spinBox_KernelSize->value()); // 形态学梯度
+		m_ImageProcessResult[2] = m_ImageProcess->Gradient(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 形态学梯度
 		break;
 	}
 	case 5: {
-		afterMorphologicalImage = m_ImageProcess->TopHat(afterThresholdImage, ui->spinBox_KernelSize->value()); // 顶帽
+		m_ImageProcessResult[2] = m_ImageProcess->TopHat(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 顶帽
 		break;
 	}
 	case 6: {
-		afterMorphologicalImage = m_ImageProcess->BlackHat(afterThresholdImage, ui->spinBox_KernelSize->value()); // 黑帽
+		m_ImageProcessResult[2] = m_ImageProcess->BlackHat(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 黑帽
 		break;
 	}
 	case 7: {
-		afterMorphologicalImage = m_ImageProcess->Hitmiss(afterThresholdImage, ui->spinBox_KernelSize->value()); // 骨架
+		m_ImageProcessResult[2] = m_ImageProcess->Hitmiss(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 骨架
 		break;
 	}
 	default: { // 默认显示原图
-		afterMorphologicalImage = afterThresholdImage;
+		m_ImageProcessResult[2] = m_ImageProcessResult[1];
 		break;
 	}
 	}
 
 	// 显示形态学图像
-	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(afterMorphologicalImage)));
+	m_ImageProcessStep = ImageProcessStep::morphological; // 设置图像处理步骤为形态学
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[2])));
 }
 
 
@@ -434,5 +465,18 @@ void MainWindow::on_comboBox_KernelShape_currentIndexChanged(int index)
 		break;
 	}
 	}
+}
+
+
+void MainWindow::on_pushButton_ImageRotation_clicked()
+{
+	int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
+	if (currentStep < 1) { return; } // 如果当前图像处理步骤小于1(没有图像)，则返回
+	m_ImageProcessResult[3] = m_ImageProcessResult[currentStep - 1]; // 获取上一步的图像
+
+	auto rotatedImage = m_ImageProcess->Rotate(m_ImageProcessResult[3], ui->doubleSpinBox_AngleRotation->value()); // 旋转图像
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(rotatedImage))); // 显示旋转后的图像
+
+	m_ImageProcessStep = ImageProcessStep::rotate; // 设置图像处理步骤为旋转
 }
 

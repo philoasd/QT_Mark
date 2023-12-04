@@ -97,9 +97,13 @@ public:
     QLabel *label_6;
     QComboBox *comboBox_MorphologicalOperations;
     QPushButton *pushButton_MorphologicalOperations;
+    QGroupBox *groupBox_3;
+    QHBoxLayout *horizontalLayout_15;
+    QLabel *label_7;
+    QDoubleSpinBox *doubleSpinBox_AngleRotation;
+    QPushButton *pushButton_ImageRotation;
     QWidget *tab_2;
     QWidget *tab_3;
-    QGroupBox *groupBox_3;
     QFrame *frame;
     QVBoxLayout *verticalLayout_4;
     QGroupBox *groupBox_CameraInfo;
@@ -267,7 +271,7 @@ public:
         page_4->setObjectName(QString::fromUtf8("page_4"));
         tabWidget = new QTabWidget(page_4);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(50, 270, 431, 371));
+        tabWidget->setGeometry(QRect(50, 270, 371, 361));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
         tabWidget->setTabPosition(QTabWidget::East);
         tabWidget->setTabShape(QTabWidget::Triangular);
@@ -275,7 +279,7 @@ public:
         tab_1->setObjectName(QString::fromUtf8("tab_1"));
         groupBox = new QGroupBox(tab_1);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(30, 20, 321, 121));
+        groupBox->setGeometry(QRect(9, 9, 331, 84));
         horizontalLayout_8 = new QHBoxLayout(groupBox);
         horizontalLayout_8->setObjectName(QString::fromUtf8("horizontalLayout_8"));
         verticalLayout = new QVBoxLayout();
@@ -335,7 +339,7 @@ public:
 
         groupBox_2 = new QGroupBox(tab_1);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(30, 150, 331, 151));
+        groupBox_2->setGeometry(QRect(10, 100, 334, 161));
         verticalLayout_5 = new QVBoxLayout(groupBox_2);
         verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
         horizontalLayout_12 = new QHBoxLayout();
@@ -425,6 +429,29 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout_14);
 
+        groupBox_3 = new QGroupBox(tab_1);
+        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
+        groupBox_3->setGeometry(QRect(10, 270, 331, 56));
+        horizontalLayout_15 = new QHBoxLayout(groupBox_3);
+        horizontalLayout_15->setObjectName(QString::fromUtf8("horizontalLayout_15"));
+        label_7 = new QLabel(groupBox_3);
+        label_7->setObjectName(QString::fromUtf8("label_7"));
+
+        horizontalLayout_15->addWidget(label_7);
+
+        doubleSpinBox_AngleRotation = new QDoubleSpinBox(groupBox_3);
+        doubleSpinBox_AngleRotation->setObjectName(QString::fromUtf8("doubleSpinBox_AngleRotation"));
+        doubleSpinBox_AngleRotation->setAlignment(Qt::AlignCenter);
+        doubleSpinBox_AngleRotation->setDecimals(1);
+        doubleSpinBox_AngleRotation->setMaximum(360.000000000000000);
+
+        horizontalLayout_15->addWidget(doubleSpinBox_AngleRotation);
+
+        pushButton_ImageRotation = new QPushButton(groupBox_3);
+        pushButton_ImageRotation->setObjectName(QString::fromUtf8("pushButton_ImageRotation"));
+
+        horizontalLayout_15->addWidget(pushButton_ImageRotation);
+
         tabWidget->addTab(tab_1, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
@@ -432,9 +459,6 @@ public:
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
         tabWidget->addTab(tab_3, QString());
-        groupBox_3 = new QGroupBox(page_4);
-        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        groupBox_3->setGeometry(QRect(60, 660, 171, 91));
         frame = new QFrame(page_4);
         frame->setObjectName(QString::fromUtf8("frame"));
         frame->setGeometry(QRect(60, 30, 391, 221));
@@ -702,7 +726,7 @@ public:
         label_6->setText(QApplication::translate("MainWindow", "Operation:", nullptr));
         comboBox_MorphologicalOperations->setItemText(0, QApplication::translate("MainWindow", "Dilate(Fill a hole)", nullptr));
         comboBox_MorphologicalOperations->setItemText(1, QApplication::translate("MainWindow", "Erode(Remove noise)", nullptr));
-        comboBox_MorphologicalOperations->setItemText(2, QApplication::translate("MainWindow", "Opene(Remove small objects)", nullptr));
+        comboBox_MorphologicalOperations->setItemText(2, QApplication::translate("MainWindow", "Opened(Remove small objects)", nullptr));
         comboBox_MorphologicalOperations->setItemText(3, QApplication::translate("MainWindow", "Close(Fill small holes/noise)", nullptr));
         comboBox_MorphologicalOperations->setItemText(4, QApplication::translate("MainWindow", "Gradient(Get the contour)", nullptr));
         comboBox_MorphologicalOperations->setItemText(5, QApplication::translate("MainWindow", "TopHat(Get the noise)", nullptr));
@@ -710,10 +734,12 @@ public:
         comboBox_MorphologicalOperations->setItemText(7, QApplication::translate("MainWindow", "Hitmiss(Detecting specific shapes)", nullptr));
 
         pushButton_MorphologicalOperations->setText(QApplication::translate("MainWindow", "Run Operation", nullptr));
+        groupBox_3->setTitle(QApplication::translate("MainWindow", "Image Ratation", nullptr));
+        label_7->setText(QApplication::translate("MainWindow", "Rotation Angle:", nullptr));
+        pushButton_ImageRotation->setText(QApplication::translate("MainWindow", "Rotation", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Image Process", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Calibration", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Egde Finder", nullptr));
-        groupBox_3->setTitle(QApplication::translate("MainWindow", "Motion", nullptr));
         groupBox_CameraInfo->setTitle(QApplication::translate("MainWindow", "Camera Info", nullptr));
         checkBox_AutoExposure->setText(QApplication::translate("MainWindow", "AutoExposure", nullptr));
         label->setText(QApplication::translate("MainWindow", "Exposure:", nullptr));
