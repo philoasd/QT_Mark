@@ -5,6 +5,7 @@
 #include <qtimer.h>
 #include <qlabel.h>
 #include <qdatetime.h>
+#include <qvector.h>
 
 #include "GlobalDef.h"
 #include <QMessageBox>
@@ -126,7 +127,7 @@ private:
 		denoising // 去噪
 	}m_ImageProcessStep; // 图像处理步骤
 
-	cv::Mat m_ImageProcessResult[6]; // 图像处理结果：0-原图，1-阈值分割，2-形态学操作，3-旋转，4-增强，5-去噪
+	QVector<QImage> m_ImageProcessResult; // 图像处理结果：0-原图，1-阈值分割，2-形态学操作，3-旋转，4-增强，5-去噪
 #pragma endregion
 
 	bool isAutoExposure = false; // 是否自动曝光

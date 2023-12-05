@@ -35,7 +35,7 @@ void MainWindow::InitUI()
 	InitStatusBar(); // 初始化状态栏
 
 	ui->checkBox_AutoExposure->setEnabled(false); // 设置自动曝光为不可用
-
+	m_ImageProcessResult.resize(6); // 设置图像处理结果的大小
 	ui->doubleSpinBox_GammaValue->setVisible(false); // 隐藏gamma值
 
 	qDebug("app start!!!");
@@ -95,7 +95,7 @@ void MainWindow::ShowImage(const CGrabResultPtr& ptrGrabResult)
 {
 	if (ptrGrabResult->GrabSucceeded()) {
 		QImage img = ImageConvert::ConvertBalserToQImage(ptrGrabResult); // 将Basler图像原始数据转换为QImage
-		m_ImageProcessResult[0] = ImageConvert::ConvertQImageToMat(img); // 将QImage赋值给图像缓冲区
+		m_ImageProcessResult[0] = img; // 将QImage赋值给图像缓冲区
 		emit ShowImageSignal(QPixmap::fromImage(img)); // 发送显示图像信号
 		m_ImageProcessStep = ImageProcessStep::loadImage; // 设置图像处理步骤为加载图像
 	}
@@ -105,19 +105,19 @@ void MainWindow::ThresholdImage(bool autoFlag)
 {
 	if (m_ImageProcessStep != ImageProcessStep::none) {
 		if (autoFlag) {
-			m_ImageProcessResult[1] = m_ImageProcess->AutoThreshold(m_ImageProcessResult[0]); // 自动阈值分割
+			m_ImageProcessResult[1] = ImageConvert::ConverMatToQImage(m_ImageProcess->AutoThreshold(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[0]))); // 自动阈值分割
 		}
 		else {
-			m_ImageProcessResult[1] = m_ImageProcess->Threshold(m_ImageProcessResult[0], ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value()); // 手动阈值分割
+			m_ImageProcessResult[1] = ImageConvert::ConverMatToQImage(m_ImageProcess->Threshold(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[0]), ui->spinBox_LeftThreshold->value(), ui->spinBox_RightThreshold->value())); // 手动阈值分割
 		}
 
 		if ((ui->spinBox_LeftThreshold->value() == 0) && (ui->spinBox_RightThreshold->value() == 255) && !autoFlag) {
 			// 如果左阈值为0，右阈值为255，则显示原图
-			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[0])));
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[0]));
 		}
 		else {
 			// 显示阈值图像
-			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[1])));
+			ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[1]));
 		}
 
 		m_ImageProcessStep = ImageProcessStep::threshold; // 设置图像处理步骤为阈值分割
@@ -370,9 +370,9 @@ void MainWindow::on_pushButton_LoadImage_clicked()
 	{
 		ui->lineEdit_ImageFilePath->setText(imgPath);
 		QImage img(imgPath);
-		m_ImageProcessResult[0] = ImageConvert::ConvertQImageToMat(img); // 将QImage赋值给图像缓冲区
+		m_ImageProcessResult[0] = img; // 将QImage赋值给图像缓冲区
 		m_ImageProcessStep = ImageProcessStep::loadImage; // 设置图像处理步骤为加载图像
-		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[0])));
+		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[0]));
 		SaveConfig("LastOpenImagePath", imgPath); // 保存上次打开的路径
 		ui->checkBox_ManualThreshold->setChecked(true);
 	}
@@ -397,7 +397,7 @@ void MainWindow::on_spinBox_RightThreshold_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 {
-	if (m_ImageProcessResult[1].empty()) // 如果阈值图像为空
+	if (m_ImageProcessResult[1].isNull()) // 如果阈值图像为空
 	{
 		QMessageBox::critical(this, "Error", "need to threshold the image!!!"); // 弹出警告对话框
 		return;
@@ -406,35 +406,35 @@ void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 	switch (ui->comboBox_MorphologicalOperations->currentIndex())
 	{
 	case 0: {
-		m_ImageProcessResult[2] = m_ImageProcess->Dilate(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 膨胀
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Dilate(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 膨胀
 		break;
 	}
 	case 1: {
-		m_ImageProcessResult[2] = m_ImageProcess->Erode(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 腐蚀
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Erode(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 腐蚀
 		break;
 	}
 	case 2: {
-		m_ImageProcessResult[2] = m_ImageProcess->Open(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 开运算
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Open(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 开运算
 		break;
 	}
 	case 3: {
-		m_ImageProcessResult[2] = m_ImageProcess->Close(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 闭运算
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Close(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 闭运算
 		break;
 	}
 	case 4: {
-		m_ImageProcessResult[2] = m_ImageProcess->Gradient(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 形态学梯度
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Gradient(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 形态学梯度
 		break;
 	}
 	case 5: {
-		m_ImageProcessResult[2] = m_ImageProcess->TopHat(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 顶帽
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->TopHat(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 顶帽
 		break;
 	}
 	case 6: {
-		m_ImageProcessResult[2] = m_ImageProcess->BlackHat(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 黑帽
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->BlackHat(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 黑帽
 		break;
 	}
 	case 7: {
-		m_ImageProcessResult[2] = m_ImageProcess->Hitmiss(m_ImageProcessResult[1], ui->spinBox_KernelSize->value()); // 骨架
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Hitmiss(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 骨架
 		break;
 	}
 	default: { // 默认显示原图
@@ -445,7 +445,7 @@ void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 
 	// 显示形态学图像
 	m_ImageProcessStep = ImageProcessStep::morphological; // 设置图像处理步骤为形态学
-	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[2])));
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[2]));
 }
 
 
@@ -477,10 +477,9 @@ void MainWindow::on_pushButton_ImageRotation_clicked()
 		QMessageBox::critical(this, "Error", "need to load image!!!"); // 弹出错误对话框
 		return;
 	}
-	m_ImageProcessResult[3] = m_ImageProcessResult[currentStep - 1]; // 获取上一步的图像
 
-	auto rotatedImage = m_ImageProcess->Rotate(m_ImageProcessResult[3], ui->doubleSpinBox_AngleRotation->value()); // 旋转图像
-	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(rotatedImage))); // 显示旋转后的图像
+	m_ImageProcessResult[3] = ImageConvert::ConverMatToQImage(m_ImageProcess->Rotate(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->doubleSpinBox_AngleRotation->value())); // 旋转图像
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[3])); // 显示旋转后的图像
 
 	m_ImageProcessStep = ImageProcessStep::rotate; // 设置图像处理步骤为旋转
 }
@@ -500,33 +499,33 @@ void MainWindow::on_pushButton_RunImageEnhancement_clicked()
 	switch (ui->comboBox_ImageEnhancementMethods->currentIndex())
 	{
 	case 0: {
-		enhancedImage = m_ImageProcess->EqualizeHist(m_ImageProcessResult[currentStep - 1]); // 直方图均衡化
+		enhancedImage = m_ImageProcess->EqualizeHist(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // 直方图均衡化
 		break;
 	}
 	case 1: {
-		//enhancedImage = m_ImageProcess->CLAHE(m_ImageProcessResult[currentStep - 1]); // 自适应直方图均衡化
+		//enhancedImage = m_ImageProcess->CLAHE(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // 自适应直方图均衡化
 		break;
 	}
 	case 2: {
-		enhancedImage = m_ImageProcess->Laplace(m_ImageProcessResult[currentStep - 1]); // 拉普拉斯变换
+		enhancedImage = m_ImageProcess->Laplace(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // 拉普拉斯变换
 		break;
 	}
 	case 3: {
-		enhancedImage = m_ImageProcess->Log(m_ImageProcessResult[currentStep - 1]); // 对数变换
+		enhancedImage = m_ImageProcess->Log(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // 对数变换
 		break;
 	}
 	case 4: {
-		enhancedImage = m_ImageProcess->Gamma(m_ImageProcessResult[currentStep - 1], ui->doubleSpinBox_GammaValue->value()); // 对比度拉伸
+		enhancedImage = m_ImageProcess->Gamma(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->doubleSpinBox_GammaValue->value()); // 对比度拉伸
 		break;
 	}
 	default: {
-		enhancedImage = m_ImageProcessResult[currentStep - 1]; // 默认显示原图
+		enhancedImage = ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]); // 默认显示原图
 		break;
 	}
 	}
 
-	m_ImageProcessResult[4] = enhancedImage; // 获取增强后的图像
-	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(enhancedImage))); // 显示增强后的图像
+	m_ImageProcessResult[4] = ImageConvert::ConverMatToQImage(enhancedImage); // 获取增强后的图像
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[4])); // 显示增强后的图像
 
 	m_ImageProcessStep = ImageProcessStep::enhancement; // 设置图像处理步骤为增强
 }
