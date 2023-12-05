@@ -93,7 +93,7 @@
           <x>50</x>
           <y>270</y>
           <width>371</width>
-          <height>361</height>
+          <height>601</height>
          </rect>
         </property>
         <property name="layoutDirection">
@@ -422,6 +422,74 @@
             <widget class="QPushButton" name="pushButton_ImageRotation">
              <property name="text">
               <string>Rotation</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>330</y>
+            <width>331</width>
+            <height>56</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Image Enhancement</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_16">
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Methods:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_GammaValue">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="decimals">
+              <number>1</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_ImageEnhancementMethods">
+             <item>
+              <property name="text">
+               <string>EqualizeHist(Enhance image contrast)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>CLAHE(Limit contrast enhancement)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Laplace(Enhancing image edges)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Log(Enhance image details)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gamma(Adjust brightness of image)</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_RunImageEnhancement">
+             <property name="text">
+              <string>Run Enhancement</string>
              </property>
             </widget>
            </item>

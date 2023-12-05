@@ -68,6 +68,10 @@ private slots:
 
 	void on_pushButton_ImageRotation_clicked();
 
+	void on_pushButton_RunImageEnhancement_clicked();
+
+	void on_comboBox_ImageEnhancementMethods_currentIndexChanged(int index);
+
 private:
 	// 初始化UI
 	void InitUI();
@@ -113,16 +117,16 @@ private:
 #pragma region 图像变量
 	enum ImageProcessStep
 	{
-		none = 0,
-		loadImage,
-		threshold,
-		morphological,
-		rotate,
-		enhancement,
-		denoising
+		none = 0, // 无操作
+		loadImage, // 加载图像
+		threshold, // 阈值分割
+		morphological, // 形态学操作
+		rotate, // 旋转
+		enhancement, // 增强
+		denoising // 去噪
 	}m_ImageProcessStep; // 图像处理步骤
+
 	cv::Mat m_ImageProcessResult[6]; // 图像处理结果：0-原图，1-阈值分割，2-形态学操作，3-旋转，4-增强，5-去噪
-	QImage test; // 测试用
 #pragma endregion
 
 	bool isAutoExposure = false; // 是否自动曝光

@@ -36,6 +36,8 @@ void MainWindow::InitUI()
 
 	ui->checkBox_AutoExposure->setEnabled(false); // 设置自动曝光为不可用
 
+	ui->doubleSpinBox_GammaValue->setVisible(false); // 隐藏gamma值
+
 	qDebug("app start!!!");
 }
 
@@ -369,7 +371,6 @@ void MainWindow::on_pushButton_LoadImage_clicked()
 		ui->lineEdit_ImageFilePath->setText(imgPath);
 		QImage img(imgPath);
 		m_ImageProcessResult[0] = ImageConvert::ConvertQImageToMat(img); // 将QImage赋值给图像缓冲区
-		test = img;
 		m_ImageProcessStep = ImageProcessStep::loadImage; // 设置图像处理步骤为加载图像
 		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(m_ImageProcessResult[0])));
 		SaveConfig("LastOpenImagePath", imgPath); // 保存上次打开的路径
@@ -398,7 +399,7 @@ void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 {
 	if (m_ImageProcessResult[1].empty()) // 如果阈值图像为空
 	{
-		QMessageBox::warning(this, "Warning", "Firse need to morpholog the image!!!"); // 弹出警告对话框
+		QMessageBox::critical(this, "Error", "need to threshold the image!!!"); // 弹出警告对话框
 		return;
 	}
 
@@ -471,12 +472,75 @@ void MainWindow::on_comboBox_KernelShape_currentIndexChanged(int index)
 void MainWindow::on_pushButton_ImageRotation_clicked()
 {
 	int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
-	if (currentStep < 1) { return; } // 如果当前图像处理步骤小于1(没有图像)，则返回
+	if (currentStep < 1) // 如果当前图像处理步骤小于1(没有图像)，则返回
+	{
+		QMessageBox::critical(this, "Error", "need to load image!!!"); // 弹出错误对话框
+		return;
+	}
 	m_ImageProcessResult[3] = m_ImageProcessResult[currentStep - 1]; // 获取上一步的图像
 
 	auto rotatedImage = m_ImageProcess->Rotate(m_ImageProcessResult[3], ui->doubleSpinBox_AngleRotation->value()); // 旋转图像
 	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(rotatedImage))); // 显示旋转后的图像
 
 	m_ImageProcessStep = ImageProcessStep::rotate; // 设置图像处理步骤为旋转
+}
+
+
+void MainWindow::on_pushButton_RunImageEnhancement_clicked()
+{
+	int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
+	if (currentStep < 1) // 如果当前图像处理步骤小于1(没有图像)，则返回
+	{
+		QMessageBox::critical(this, "Error", "need to load image!!!"); // 弹出错误对话框
+		return;
+	}
+
+	cv::Mat enhancedImage;
+
+	switch (ui->comboBox_ImageEnhancementMethods->currentIndex())
+	{
+	case 0: {
+		enhancedImage = m_ImageProcess->EqualizeHist(m_ImageProcessResult[currentStep - 1]); // 直方图均衡化
+		break;
+	}
+	case 1: {
+		//enhancedImage = m_ImageProcess->CLAHE(m_ImageProcessResult[currentStep - 1]); // 自适应直方图均衡化
+		break;
+	}
+	case 2: {
+		enhancedImage = m_ImageProcess->Laplace(m_ImageProcessResult[currentStep - 1]); // 拉普拉斯变换
+		break;
+	}
+	case 3: {
+		enhancedImage = m_ImageProcess->Log(m_ImageProcessResult[currentStep - 1]); // 对数变换
+		break;
+	}
+	case 4: {
+		enhancedImage = m_ImageProcess->Gamma(m_ImageProcessResult[currentStep - 1], ui->doubleSpinBox_GammaValue->value()); // 对比度拉伸
+		break;
+	}
+	default: {
+		enhancedImage = m_ImageProcessResult[currentStep - 1]; // 默认显示原图
+		break;
+	}
+	}
+
+	m_ImageProcessResult[4] = enhancedImage; // 获取增强后的图像
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(enhancedImage))); // 显示增强后的图像
+
+	m_ImageProcessStep = ImageProcessStep::enhancement; // 设置图像处理步骤为增强
+}
+
+
+void MainWindow::on_comboBox_ImageEnhancementMethods_currentIndexChanged(int index)
+{
+	if (index == 4)
+	{
+		ui->doubleSpinBox_GammaValue->setVisible(true);
+	}
+	else
+	{
+		ui->doubleSpinBox_GammaValue->setVisible(false);
+	}
 }
 

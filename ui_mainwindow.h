@@ -102,6 +102,12 @@ public:
     QLabel *label_7;
     QDoubleSpinBox *doubleSpinBox_AngleRotation;
     QPushButton *pushButton_ImageRotation;
+    QGroupBox *groupBox_4;
+    QHBoxLayout *horizontalLayout_16;
+    QLabel *label_8;
+    QDoubleSpinBox *doubleSpinBox_GammaValue;
+    QComboBox *comboBox_ImageEnhancementMethods;
+    QPushButton *pushButton_RunImageEnhancement;
     QWidget *tab_2;
     QWidget *tab_3;
     QFrame *frame;
@@ -271,7 +277,7 @@ public:
         page_4->setObjectName(QString::fromUtf8("page_4"));
         tabWidget = new QTabWidget(page_4);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tabWidget->setGeometry(QRect(50, 270, 371, 361));
+        tabWidget->setGeometry(QRect(50, 270, 371, 601));
         tabWidget->setLayoutDirection(Qt::LeftToRight);
         tabWidget->setTabPosition(QTabWidget::East);
         tabWidget->setTabShape(QTabWidget::Triangular);
@@ -451,6 +457,38 @@ public:
         pushButton_ImageRotation->setObjectName(QString::fromUtf8("pushButton_ImageRotation"));
 
         horizontalLayout_15->addWidget(pushButton_ImageRotation);
+
+        groupBox_4 = new QGroupBox(tab_1);
+        groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
+        groupBox_4->setGeometry(QRect(10, 330, 331, 56));
+        horizontalLayout_16 = new QHBoxLayout(groupBox_4);
+        horizontalLayout_16->setObjectName(QString::fromUtf8("horizontalLayout_16"));
+        label_8 = new QLabel(groupBox_4);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+
+        horizontalLayout_16->addWidget(label_8);
+
+        doubleSpinBox_GammaValue = new QDoubleSpinBox(groupBox_4);
+        doubleSpinBox_GammaValue->setObjectName(QString::fromUtf8("doubleSpinBox_GammaValue"));
+        doubleSpinBox_GammaValue->setAlignment(Qt::AlignCenter);
+        doubleSpinBox_GammaValue->setDecimals(1);
+
+        horizontalLayout_16->addWidget(doubleSpinBox_GammaValue);
+
+        comboBox_ImageEnhancementMethods = new QComboBox(groupBox_4);
+        comboBox_ImageEnhancementMethods->addItem(QString());
+        comboBox_ImageEnhancementMethods->addItem(QString());
+        comboBox_ImageEnhancementMethods->addItem(QString());
+        comboBox_ImageEnhancementMethods->addItem(QString());
+        comboBox_ImageEnhancementMethods->addItem(QString());
+        comboBox_ImageEnhancementMethods->setObjectName(QString::fromUtf8("comboBox_ImageEnhancementMethods"));
+
+        horizontalLayout_16->addWidget(comboBox_ImageEnhancementMethods);
+
+        pushButton_RunImageEnhancement = new QPushButton(groupBox_4);
+        pushButton_RunImageEnhancement->setObjectName(QString::fromUtf8("pushButton_RunImageEnhancement"));
+
+        horizontalLayout_16->addWidget(pushButton_RunImageEnhancement);
 
         tabWidget->addTab(tab_1, QString());
         tab_2 = new QWidget();
@@ -737,6 +775,15 @@ public:
         groupBox_3->setTitle(QApplication::translate("MainWindow", "Image Ratation", nullptr));
         label_7->setText(QApplication::translate("MainWindow", "Rotation Angle:", nullptr));
         pushButton_ImageRotation->setText(QApplication::translate("MainWindow", "Rotation", nullptr));
+        groupBox_4->setTitle(QApplication::translate("MainWindow", "Image Enhancement", nullptr));
+        label_8->setText(QApplication::translate("MainWindow", "Methods:", nullptr));
+        comboBox_ImageEnhancementMethods->setItemText(0, QApplication::translate("MainWindow", "EqualizeHist(Enhance image contrast)", nullptr));
+        comboBox_ImageEnhancementMethods->setItemText(1, QApplication::translate("MainWindow", "CLAHE(Limit contrast enhancement)", nullptr));
+        comboBox_ImageEnhancementMethods->setItemText(2, QApplication::translate("MainWindow", "Laplace(Enhancing image edges)", nullptr));
+        comboBox_ImageEnhancementMethods->setItemText(3, QApplication::translate("MainWindow", "Log(Enhance image details)", nullptr));
+        comboBox_ImageEnhancementMethods->setItemText(4, QApplication::translate("MainWindow", "Gamma(Adjust brightness of image)", nullptr));
+
+        pushButton_RunImageEnhancement->setText(QApplication::translate("MainWindow", "Run Enhancement", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Image Process", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Calibration", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Egde Finder", nullptr));
