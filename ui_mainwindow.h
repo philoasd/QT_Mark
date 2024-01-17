@@ -72,7 +72,7 @@ public:
     QLabel *label_2;
     QWidget *page_4;
     QTabWidget *tabWidget;
-    QWidget *tab_1;
+    QWidget *tab;
     QGroupBox *groupBox;
     QHBoxLayout *horizontalLayout_8;
     QVBoxLayout *verticalLayout;
@@ -108,8 +108,25 @@ public:
     QDoubleSpinBox *doubleSpinBox_GammaValue;
     QComboBox *comboBox_ImageEnhancementMethods;
     QPushButton *pushButton_RunImageEnhancement;
+    QGroupBox *groupBox_5;
+    QHBoxLayout *horizontalLayout_17;
+    QLabel *label_9;
+    QComboBox *comboBox_ImageDenoisingMethods;
+    QPushButton *pushButton_RunImageDenoising;
+    QGroupBox *groupBox_6;
+    QHBoxLayout *horizontalLayout_19;
+    QLabel *label_11;
+    QSpinBox *spinBox_HoughCircleRadius;
+    QPushButton *pushButton_HoughCircleDetect;
+    QWidget *tab_1;
     QWidget *tab_2;
+    QPushButton *pushButton_Test;
     QWidget *tab_3;
+    QWidget *layoutWidget;
+    QHBoxLayout *horizontalLayout_18;
+    QLabel *label_10;
+    QLineEdit *lineEdit_TemplateFilePath;
+    QPushButton *pushButton_LoadTemplateFile;
     QFrame *frame;
     QVBoxLayout *verticalLayout_4;
     QGroupBox *groupBox_CameraInfo;
@@ -281,9 +298,9 @@ public:
         tabWidget->setLayoutDirection(Qt::LeftToRight);
         tabWidget->setTabPosition(QTabWidget::East);
         tabWidget->setTabShape(QTabWidget::Triangular);
-        tab_1 = new QWidget();
-        tab_1->setObjectName(QString::fromUtf8("tab_1"));
-        groupBox = new QGroupBox(tab_1);
+        tab = new QWidget();
+        tab->setObjectName(QString::fromUtf8("tab"));
+        groupBox = new QGroupBox(tab);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
         groupBox->setGeometry(QRect(9, 9, 331, 84));
         horizontalLayout_8 = new QHBoxLayout(groupBox);
@@ -343,7 +360,7 @@ public:
 
         horizontalLayout_8->addLayout(verticalLayout);
 
-        groupBox_2 = new QGroupBox(tab_1);
+        groupBox_2 = new QGroupBox(tab);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
         groupBox_2->setGeometry(QRect(10, 100, 334, 161));
         verticalLayout_5 = new QVBoxLayout(groupBox_2);
@@ -435,7 +452,7 @@ public:
 
         verticalLayout_5->addLayout(horizontalLayout_14);
 
-        groupBox_3 = new QGroupBox(tab_1);
+        groupBox_3 = new QGroupBox(tab);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
         groupBox_3->setGeometry(QRect(10, 270, 331, 56));
         horizontalLayout_15 = new QHBoxLayout(groupBox_3);
@@ -458,7 +475,7 @@ public:
 
         horizontalLayout_15->addWidget(pushButton_ImageRotation);
 
-        groupBox_4 = new QGroupBox(tab_1);
+        groupBox_4 = new QGroupBox(tab);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
         groupBox_4->setGeometry(QRect(10, 330, 331, 56));
         horizontalLayout_16 = new QHBoxLayout(groupBox_4);
@@ -481,6 +498,7 @@ public:
         comboBox_ImageEnhancementMethods->addItem(QString());
         comboBox_ImageEnhancementMethods->addItem(QString());
         comboBox_ImageEnhancementMethods->addItem(QString());
+        comboBox_ImageEnhancementMethods->addItem(QString());
         comboBox_ImageEnhancementMethods->setObjectName(QString::fromUtf8("comboBox_ImageEnhancementMethods"));
 
         horizontalLayout_16->addWidget(comboBox_ImageEnhancementMethods);
@@ -490,12 +508,91 @@ public:
 
         horizontalLayout_16->addWidget(pushButton_RunImageEnhancement);
 
+        groupBox_5 = new QGroupBox(tab);
+        groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
+        groupBox_5->setGeometry(QRect(10, 390, 331, 56));
+        horizontalLayout_17 = new QHBoxLayout(groupBox_5);
+        horizontalLayout_17->setObjectName(QString::fromUtf8("horizontalLayout_17"));
+        label_9 = new QLabel(groupBox_5);
+        label_9->setObjectName(QString::fromUtf8("label_9"));
+
+        horizontalLayout_17->addWidget(label_9);
+
+        comboBox_ImageDenoisingMethods = new QComboBox(groupBox_5);
+        comboBox_ImageDenoisingMethods->addItem(QString());
+        comboBox_ImageDenoisingMethods->addItem(QString());
+        comboBox_ImageDenoisingMethods->addItem(QString());
+        comboBox_ImageDenoisingMethods->addItem(QString());
+        comboBox_ImageDenoisingMethods->addItem(QString());
+        comboBox_ImageDenoisingMethods->addItem(QString());
+        comboBox_ImageDenoisingMethods->setObjectName(QString::fromUtf8("comboBox_ImageDenoisingMethods"));
+
+        horizontalLayout_17->addWidget(comboBox_ImageDenoisingMethods);
+
+        pushButton_RunImageDenoising = new QPushButton(groupBox_5);
+        pushButton_RunImageDenoising->setObjectName(QString::fromUtf8("pushButton_RunImageDenoising"));
+
+        horizontalLayout_17->addWidget(pushButton_RunImageDenoising);
+
+        groupBox_6 = new QGroupBox(tab);
+        groupBox_6->setObjectName(QString::fromUtf8("groupBox_6"));
+        groupBox_6->setGeometry(QRect(10, 450, 331, 56));
+        groupBox_6->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        horizontalLayout_19 = new QHBoxLayout(groupBox_6);
+        horizontalLayout_19->setObjectName(QString::fromUtf8("horizontalLayout_19"));
+        label_11 = new QLabel(groupBox_6);
+        label_11->setObjectName(QString::fromUtf8("label_11"));
+
+        horizontalLayout_19->addWidget(label_11);
+
+        spinBox_HoughCircleRadius = new QSpinBox(groupBox_6);
+        spinBox_HoughCircleRadius->setObjectName(QString::fromUtf8("spinBox_HoughCircleRadius"));
+        spinBox_HoughCircleRadius->setAlignment(Qt::AlignCenter);
+        spinBox_HoughCircleRadius->setMinimum(1);
+        spinBox_HoughCircleRadius->setMaximum(99999);
+        spinBox_HoughCircleRadius->setValue(10);
+
+        horizontalLayout_19->addWidget(spinBox_HoughCircleRadius);
+
+        pushButton_HoughCircleDetect = new QPushButton(groupBox_6);
+        pushButton_HoughCircleDetect->setObjectName(QString::fromUtf8("pushButton_HoughCircleDetect"));
+
+        horizontalLayout_19->addWidget(pushButton_HoughCircleDetect);
+
+        tabWidget->addTab(tab, QString());
+        tab_1 = new QWidget();
+        tab_1->setObjectName(QString::fromUtf8("tab_1"));
         tabWidget->addTab(tab_1, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
+        pushButton_Test = new QPushButton(tab_2);
+        pushButton_Test->setObjectName(QString::fromUtf8("pushButton_Test"));
+        pushButton_Test->setGeometry(QRect(70, 60, 75, 23));
         tabWidget->addTab(tab_2, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
+        layoutWidget = new QWidget(tab_3);
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
+        layoutWidget->setGeometry(QRect(6, 19, 331, 25));
+        horizontalLayout_18 = new QHBoxLayout(layoutWidget);
+        horizontalLayout_18->setObjectName(QString::fromUtf8("horizontalLayout_18"));
+        horizontalLayout_18->setContentsMargins(0, 0, 0, 0);
+        label_10 = new QLabel(layoutWidget);
+        label_10->setObjectName(QString::fromUtf8("label_10"));
+
+        horizontalLayout_18->addWidget(label_10);
+
+        lineEdit_TemplateFilePath = new QLineEdit(layoutWidget);
+        lineEdit_TemplateFilePath->setObjectName(QString::fromUtf8("lineEdit_TemplateFilePath"));
+        lineEdit_TemplateFilePath->setReadOnly(true);
+
+        horizontalLayout_18->addWidget(lineEdit_TemplateFilePath);
+
+        pushButton_LoadTemplateFile = new QPushButton(layoutWidget);
+        pushButton_LoadTemplateFile->setObjectName(QString::fromUtf8("pushButton_LoadTemplateFile"));
+
+        horizontalLayout_18->addWidget(pushButton_LoadTemplateFile);
+
         tabWidget->addTab(tab_3, QString());
         frame = new QFrame(page_4);
         frame->setObjectName(QString::fromUtf8("frame"));
@@ -673,7 +770,7 @@ public:
 
         stackedWidget->setCurrentIndex(1);
         stackedWidget_Parameters->setCurrentIndex(1);
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -782,11 +879,29 @@ public:
         comboBox_ImageEnhancementMethods->setItemText(2, QApplication::translate("MainWindow", "Laplace(Enhancing image edges)", nullptr));
         comboBox_ImageEnhancementMethods->setItemText(3, QApplication::translate("MainWindow", "Log(Enhance image details)", nullptr));
         comboBox_ImageEnhancementMethods->setItemText(4, QApplication::translate("MainWindow", "Gamma(Adjust brightness of image)", nullptr));
+        comboBox_ImageEnhancementMethods->setItemText(5, QApplication::translate("MainWindow", "Sobel", nullptr));
 
         pushButton_RunImageEnhancement->setText(QApplication::translate("MainWindow", "Run Enhancement", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Image Process", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Calibration", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Egde Finder", nullptr));
+        groupBox_5->setTitle(QApplication::translate("MainWindow", "Image Denoising", nullptr));
+        label_9->setText(QApplication::translate("MainWindow", "Methods:", nullptr));
+        comboBox_ImageDenoisingMethods->setItemText(0, QApplication::translate("MainWindow", "Blur", nullptr));
+        comboBox_ImageDenoisingMethods->setItemText(1, QApplication::translate("MainWindow", "BoxFilter", nullptr));
+        comboBox_ImageDenoisingMethods->setItemText(2, QApplication::translate("MainWindow", "MedianBlur", nullptr));
+        comboBox_ImageDenoisingMethods->setItemText(3, QApplication::translate("MainWindow", "GaussianBlur", nullptr));
+        comboBox_ImageDenoisingMethods->setItemText(4, QApplication::translate("MainWindow", "BilateralFilter", nullptr));
+        comboBox_ImageDenoisingMethods->setItemText(5, QApplication::translate("MainWindow", "NLMeanFilter", nullptr));
+
+        pushButton_RunImageDenoising->setText(QApplication::translate("MainWindow", "Run Denoising", nullptr));
+        groupBox_6->setTitle(QApplication::translate("MainWindow", "Hough Circle Detect", nullptr));
+        label_11->setText(QApplication::translate("MainWindow", "Radius : ", nullptr));
+        pushButton_HoughCircleDetect->setText(QApplication::translate("MainWindow", "Detect Circle", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("MainWindow", "Image Process", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_1), QApplication::translate("MainWindow", "Calibration", nullptr));
+        pushButton_Test->setText(QApplication::translate("MainWindow", "TEST", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("MainWindow", "Egde Finder", nullptr));
+        label_10->setText(QApplication::translate("MainWindow", "Template File:", nullptr));
+        pushButton_LoadTemplateFile->setText(QApplication::translate("MainWindow", "Load", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QApplication::translate("MainWindow", "Mode Finder", nullptr));
         groupBox_CameraInfo->setTitle(QApplication::translate("MainWindow", "Camera Info", nullptr));
         checkBox_AutoExposure->setText(QApplication::translate("MainWindow", "AutoExposure", nullptr));
         label->setText(QApplication::translate("MainWindow", "Exposure:", nullptr));
@@ -794,7 +909,7 @@ public:
         pushButton_ConnectedCamera->setText(QApplication::translate("MainWindow", "Connected", nullptr));
         pushButton_DisConnectedCamera->setText(QApplication::translate("MainWindow", "DisConnected", nullptr));
         groupBox_LoadImage->setTitle(QApplication::translate("MainWindow", "Load Image", nullptr));
-        pushButton_LoadImage->setText(QApplication::translate("MainWindow", "load Image", nullptr));
+        pushButton_LoadImage->setText(QApplication::translate("MainWindow", "Load Image", nullptr));
         toolBar_Tool->setWindowTitle(QApplication::translate("MainWindow", "toolBar", nullptr));
         toolBar_Shapes->setWindowTitle(QApplication::translate("MainWindow", "toolBar", nullptr));
         toolBar_Camera->setWindowTitle(QApplication::translate("MainWindow", "toolBar", nullptr));

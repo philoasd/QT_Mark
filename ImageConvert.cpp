@@ -7,12 +7,12 @@ ImageConvert::ImageConvert(QObject* parent)
 ImageConvert::~ImageConvert()
 {}
 
-QImage ImageConvert::ConvertBalserToQImage(const Pylon::CGrabResultPtr ptrGrabResult)
+QImage ImageConvert::ConvertBalserToQImage(const Pylon::CGrabResultPtr& ptrGrabResult)
 {
 	return QImage((uchar*)ptrGrabResult->GetBuffer(), ptrGrabResult->GetWidth(), ptrGrabResult->GetHeight(), QImage::Format_Grayscale8);
 }
 
-QImage ImageConvert::ConverMatToQImage(cv::Mat mat)
+QImage ImageConvert::ConverMatToQImage(const cv::Mat& mat)
 {
 	switch (mat.type()) {
 	case CV_8UC1: {
@@ -54,7 +54,7 @@ QImage ImageConvert::ConverMatToQImage(cv::Mat mat)
 	return QImage();
 }
 
-cv::Mat ImageConvert::ConvertQImageToMat(QImage image)
+cv::Mat ImageConvert::ConvertQImageToMat(const QImage& image)
 {
 	cv::Mat mat;
 	switch (image.format())
@@ -70,6 +70,7 @@ cv::Mat ImageConvert::ConvertQImageToMat(QImage image)
 	case QImage::Format_ARGB32_Premultiplied:
 	{
 		mat = cv::Mat(image.height(), image.width(), CV_8UC4, (void*)image.constBits(), image.bytesPerLine());
+		cv::cvtColor(mat, mat, cv::COLOR_BGRA2BGR); //opencv需要转为BGR的字节顺序
 		break;
 	}
 	case QImage::Format_RGB888: //RR,GG,BB字节顺序存储

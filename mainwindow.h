@@ -73,6 +73,14 @@ private slots:
 
 	void on_comboBox_ImageEnhancementMethods_currentIndexChanged(int index);
 
+    void on_pushButton_RunImageDenoising_clicked();
+
+    void on_pushButton_LoadTemplateFile_clicked();
+
+    void on_pushButton_HoughCircleDetect_clicked();
+
+    void on_pushButton_Test_clicked();
+
 private:
 	// 初始化UI
 	void InitUI();

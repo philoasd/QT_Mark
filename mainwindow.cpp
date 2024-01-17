@@ -104,6 +104,8 @@ void MainWindow::ShowImage(const CGrabResultPtr& ptrGrabResult)
 void MainWindow::ThresholdImage(bool autoFlag)
 {
 	if (m_ImageProcessStep != ImageProcessStep::none) {
+		int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
+
 		if (autoFlag) {
 			m_ImageProcessResult[1] = ImageConvert::ConverMatToQImage(m_ImageProcess->AutoThreshold(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[0]))); // 自动阈值分割
 		}
@@ -397,48 +399,49 @@ void MainWindow::on_spinBox_RightThreshold_valueChanged(int arg1)
 
 void MainWindow::on_pushButton_MorphologicalOperations_clicked()
 {
-	if (m_ImageProcessResult[1].isNull()) // 如果阈值图像为空
-	{
-		QMessageBox::critical(this, "Error", "need to threshold the image!!!"); // 弹出警告对话框
-		return;
-	}
+	//if (m_ImageProcessResult[1].isNull()) // 如果阈值图像为空
+	//{
+	//	QMessageBox::critical(this, "Error", "need to threshold the image!!!"); // 弹出警告对话框
+	//	return;
+	//}
+	int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
 
 	switch (ui->comboBox_MorphologicalOperations->currentIndex())
 	{
 	case 0: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Dilate(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 膨胀
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Dilate(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 膨胀
 		break;
 	}
 	case 1: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Erode(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 腐蚀
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Erode(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 腐蚀
 		break;
 	}
 	case 2: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Open(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 开运算
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Open(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 开运算
 		break;
 	}
 	case 3: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Close(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 闭运算
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Close(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 闭运算
 		break;
 	}
 	case 4: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Gradient(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 形态学梯度
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Gradient(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 形态学梯度
 		break;
 	}
 	case 5: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->TopHat(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 顶帽
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->TopHat(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 顶帽
 		break;
 	}
 	case 6: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->BlackHat(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 黑帽
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->BlackHat(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 黑帽
 		break;
 	}
 	case 7: {
-		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Hitmiss(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[1]), ui->spinBox_KernelSize->value())); // 骨架
+		m_ImageProcessResult[2] = ImageConvert::ConverMatToQImage(m_ImageProcess->Hitmiss(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value())); // 骨架
 		break;
 	}
 	default: { // 默认显示原图
-		m_ImageProcessResult[2] = m_ImageProcessResult[1];
+		m_ImageProcessResult[2] = m_ImageProcessResult[currentStep - 1];
 		break;
 	}
 	}
@@ -503,7 +506,7 @@ void MainWindow::on_pushButton_RunImageEnhancement_clicked()
 		break;
 	}
 	case 1: {
-		//enhancedImage = m_ImageProcess->CLAHE(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // 自适应直方图均衡化
+		enhancedImage = m_ImageProcess->CLAHE(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // 自适应直方图均衡化
 		break;
 	}
 	case 2: {
@@ -516,6 +519,10 @@ void MainWindow::on_pushButton_RunImageEnhancement_clicked()
 	}
 	case 4: {
 		enhancedImage = m_ImageProcess->Gamma(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->doubleSpinBox_GammaValue->value()); // 对比度拉伸
+		break;
+	}
+	case 5: {
+		enhancedImage = m_ImageProcess->Sobel(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1])); // Sobel变换
 		break;
 	}
 	default: {
@@ -541,5 +548,144 @@ void MainWindow::on_comboBox_ImageEnhancementMethods_currentIndexChanged(int ind
 	{
 		ui->doubleSpinBox_GammaValue->setVisible(false);
 	}
+}
+
+
+void MainWindow::on_pushButton_RunImageDenoising_clicked()
+{
+	int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
+	if (currentStep < 1) // 如果当前图像处理步骤小于1(没有图像)，则返回
+	{
+		QMessageBox::critical(this, "Error", "need to load image!!!"); // 弹出错误对话框
+		return;
+	}
+
+	cv::Mat denoisedImage;
+	switch (ui->comboBox_ImageDenoisingMethods->currentIndex())
+	{
+	case 0: {
+		denoisedImage = m_ImageProcess->Blur(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value()); // 均值滤波
+		break;
+	}
+	case 1: {
+		denoisedImage = m_ImageProcess->BoxFilter(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value()); // 方框滤波
+		break;
+	}
+	case 2: {
+		denoisedImage = m_ImageProcess->MedianBlur(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value()); // 中值滤波
+		break;
+	}
+	case 3: {
+		denoisedImage = m_ImageProcess->GaussianBlur(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value()); // 高斯滤波
+		break;
+	}
+	case 4: {
+		denoisedImage = m_ImageProcess->BilateralFilter(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value()); // 双边滤波
+		break;
+	}
+	case 5: {
+		denoisedImage = m_ImageProcess->NLMeanFilter(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), ui->spinBox_KernelSize->value()); // 非局部均值滤波
+		break;
+	}
+	default: {
+		denoisedImage = ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]); // 默认显示原图
+		break;
+	}
+	}
+
+	m_ImageProcessResult[5] = ImageConvert::ConverMatToQImage(denoisedImage); // 获取降噪后的图像
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[5])); // 显示降噪后的图像
+
+	m_ImageProcessStep = ImageProcessStep::denoising; // 设置图像处理步骤为降噪
+}
+
+
+void MainWindow::on_pushButton_LoadTemplateFile_clicked()
+{
+	QString templateFilePath;
+	QString lastOpenTemplateFilePath = LoadConfig("LastOpenImagePath").toString(); // 获取上次打开的路径
+	templateFilePath = QFileDialog::getOpenFileName(this, tr("Load Image"), lastOpenTemplateFilePath, tr("Image Files(*.bmp *.png *.jpg);;All(*.*)"));
+	if (templateFilePath != "")
+	{
+		ui->lineEdit_TemplateFilePath->setText(templateFilePath);
+		QImage templateImage(templateFilePath);
+
+		//ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(m_ImageProcessResult[0]));
+		SaveConfig("lastOpenTemplateFilePath", lastOpenTemplateFilePath); // 保存上次打开的路径
+
+		auto matchResult = m_ImageProcess->MatchTemplate(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[0]), ImageConvert::ConvertQImageToMat(templateImage));
+		ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(matchResult)));
+	}
+	else
+	{
+		return;
+	}
+}
+
+
+void MainWindow::on_pushButton_HoughCircleDetect_clicked()
+{
+	auto radius = ui->spinBox_HoughCircleRadius->value();
+	int currentStep = static_cast<int>(m_ImageProcessStep); // 获取当前图像处理步骤
+	auto result = m_ImageProcess->HoughCircleDetect(ImageConvert::ConvertQImageToMat(m_ImageProcessResult[currentStep - 1]), radius);
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(result)));
+}
+
+
+void MainWindow::on_pushButton_Test_clicked()
+{
+	auto image = m_ImageProcessResult[0];
+	auto cvMat = ImageConvert::ConvertQImageToMat(image);
+	if (cvMat.empty()) {
+		int i = 0;
+	}
+	auto open_image = m_ImageProcess->Open(cvMat, 15);
+
+	auto close_image = m_ImageProcess->Close(open_image, 7);
+
+	auto threshold_image = m_ImageProcess->Threshold(close_image, 120, 255);
+
+	auto filter_image = m_ImageProcess->Laplace(threshold_image);
+
+	std::vector<std::vector<cv::Point>> contours;
+	cv::findContours(filter_image, contours, cv::RETR_TREE, cv::CHAIN_APPROX_SIMPLE);
+	cv::Mat img_contours;
+	cv::cvtColor(cvMat, img_contours, cv::COLOR_GRAY2BGR);
+	cv::drawContours(img_contours, contours, -1, cv::Scalar(0, 255, 0), 1); // 画出所有轮廓
+
+	float targetArea = 3.14 * 1400 * 1400;
+	std::vector<std::vector<cv::Point>> reslutContours;
+	// 计算轮廓的面积
+	for (size_t i = 0; i < contours.size(); i++) {
+		// 计算轮廓的面积和周长
+		double area = cv::contourArea(contours[i]);
+		double perimeter = cv::arcLength(contours[i], true);
+		// 计算圆形度
+		double circularity = (4 * 3.1415926 * area) / (perimeter * perimeter);
+
+		if (!(targetArea * 0.25 <= area && area <= targetArea * 1.44)) {
+			continue;
+		}
+
+		reslutContours.push_back(contours[i]);
+	}
+	cv::Mat result = cv::Mat::zeros(cvMat.size(), CV_8UC3);
+	cv::drawContours(result, reslutContours, -1, cv::Scalar(0, 0, 255), 2);
+
+	cv::Mat origin = ImageConvert::ConvertQImageToMat(m_ImageProcessResult[0]);
+	if (reslutContours.empty()) {
+		QMessageBox::critical(this, "Error", "No circle found!!!"); // 弹出错误对话框
+		return;
+	}
+	for (auto contour : reslutContours) {
+		cv::RotatedRect ellipse = cv::fitEllipse(contour);
+		if (origin.channels() == 1)
+			cv::cvtColor(origin, origin, cv::COLOR_GRAY2BGR);
+		cv::Scalar color(rand() % 256, rand() % 256, rand() % 256);
+		cv::ellipse(origin, ellipse, color, 2);
+	}
+	ui->graphicsView_Camera->ShowImage(QPixmap::fromImage(ImageConvert::ConverMatToQImage(origin)));
+	// 显示找到多少个圆
+	QMessageBox::information(this, "Information", "Found " + QString::number(reslutContours.size()) + " circles");
 }
 

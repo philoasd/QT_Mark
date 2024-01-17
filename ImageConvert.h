@@ -14,11 +14,11 @@ public:
 	~ImageConvert();
 
 	// 将Basler图像转换为QImage
-	static QImage ConvertBalserToQImage(const Pylon::CGrabResultPtr ptrGrabResult);
+	static QImage ConvertBalserToQImage(const Pylon::CGrabResultPtr& ptrGrabResult);
 
 	// 将Mat图像转换为QImage
-	static QImage ConverMatToQImage(cv::Mat mat);
+	static QImage ConverMatToQImage(const cv::Mat& mat);
 
 	// 将QImage转换为Mat图像
-	static cv::Mat ConvertQImageToMat(QImage image);
+	static cv::Mat ConvertQImageToMat(const QImage& image);
 };

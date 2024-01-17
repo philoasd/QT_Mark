@@ -106,9 +106,9 @@
          <enum>QTabWidget::Triangular</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>2</number>
         </property>
-        <widget class="QWidget" name="tab_1">
+        <widget class="QWidget" name="tab">
          <attribute name="title">
           <string>Image Process</string>
          </attribute>
@@ -484,6 +484,11 @@
                <string>Gamma(Adjust brightness of image)</string>
               </property>
              </item>
+             <item>
+              <property name="text">
+               <string>Sobel</string>
+              </property>
+             </item>
             </widget>
            </item>
            <item>
@@ -495,16 +500,178 @@
            </item>
           </layout>
          </widget>
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>390</y>
+            <width>331</width>
+            <height>56</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Image Denoising</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_17">
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>Methods:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBox_ImageDenoisingMethods">
+             <item>
+              <property name="text">
+               <string>Blur</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BoxFilter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>MedianBlur</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>GaussianBlur</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>BilateralFilter</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>NLMeanFilter</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_RunImageDenoising">
+             <property name="text">
+              <string>Run Denoising</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="groupBox_6">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>450</y>
+            <width>331</width>
+            <height>56</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Hough Circle Detect</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_19">
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>Radius : </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="spinBox_HoughCircleRadius">
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>99999</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_HoughCircleDetect">
+             <property name="text">
+              <string>Detect Circle</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
-        <widget class="QWidget" name="tab_2">
+        <widget class="QWidget" name="tab_1">
          <attribute name="title">
           <string>Calibration</string>
          </attribute>
         </widget>
-        <widget class="QWidget" name="tab_3">
+        <widget class="QWidget" name="tab_2">
          <attribute name="title">
           <string>Egde Finder</string>
          </attribute>
+         <widget class="QPushButton" name="pushButton_Test">
+          <property name="geometry">
+           <rect>
+            <x>70</x>
+            <y>60</y>
+            <width>75</width>
+            <height>23</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>TEST</string>
+          </property>
+         </widget>
+        </widget>
+        <widget class="QWidget" name="tab_3">
+         <attribute name="title">
+          <string>Mode Finder</string>
+         </attribute>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>6</x>
+            <y>19</y>
+            <width>331</width>
+            <height>25</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_18">
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>Template File:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_TemplateFilePath">
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_LoadTemplateFile">
+             <property name="text">
+              <string>Load</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </widget>
        <widget class="QFrame" name="frame">
@@ -684,7 +851,7 @@
               <item>
                <widget class="QPushButton" name="pushButton_LoadImage">
                 <property name="text">
-                 <string>load Image</string>
+                 <string>Load Image</string>
                 </property>
                </widget>
               </item>
